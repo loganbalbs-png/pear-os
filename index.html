@@ -7,7 +7,7 @@
 <style>
 body {
   margin: 0;
-  background: linear-gradient(to bottom, #2d8cff, #5fe1ff);
+  background: linear-gradient(to bottom, #0a0a0a, #1e90ff);
   font-family: Arial;
   display: flex;
   justify-content: center;
@@ -16,12 +16,12 @@ body {
 .phone {
   width: 320px;
   height: 568px;
-  border-radius: 40px;
-  margin-top: 30px;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(15px);
-  overflow: hidden;
+  border-radius: 50px;
+  margin-top: 20px;
+  background: radial-gradient(circle at center, #4da6ff, #0a0a0a);
+  padding: 15px;
   position: relative;
+  overflow: hidden;
 }
 
 /* SCREENS */
@@ -31,66 +31,77 @@ body {
   height: 100%;
   display: none;
 }
+.active { display: block; }
 
-.active {
-  display: block;
-}
-
-/* HOME */
-.home {
-  padding: 15px;
-}
-
+/* ICONS */
 .icon {
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  display: inline-block;
-  margin: 10px;
-  text-align: center;
-  line-height: 65px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
+  box-shadow: inset 0 3px 6px rgba(255,255,255,0.3),
+              0 5px 10px rgba(0,0,0,0.6);
 }
 
+/* COLORS */
 .green { background: #34c759; }
 .blue { background: #007aff; }
 .gray { background: #8e8e93; }
 .yellow { background: #ffcc00; }
 .pink { background: #ff2d55; }
 .purple { background: #af52de; }
+.cyan { background: #32ade6; }
 
-/* TOP BAR */
+/* TOP WIDGETS */
+.top {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* GRID */
+.grid {
+  text-align: center;
+}
+
+/* DOCK */
+.dock {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+/* APP SCREENS */
 .topbar {
   background: #007aff;
   color: white;
   padding: 10px;
   text-align: center;
-  font-weight: bold;
 }
 
-/* BACK BUTTON */
 .back {
   position: absolute;
   bottom: 10px;
   left: 10px;
   background: #007aff;
   color: white;
-  padding: 8px 12px;
+  padding: 8px;
   border-radius: 10px;
 }
 
 /* CAMERA */
-video {
-  width: 100%;
-  height: auto;
-}
+video { width: 100%; }
 
 /* BROWSER */
 iframe {
   width: 100%;
-  height: 90%;
+  height: 85%;
   border: none;
 }
 
@@ -101,52 +112,79 @@ iframe {
 
 <div class="phone">
 
-<!-- HOME SCREEN -->
-<div id="home" class="screen active home">
+<!-- HOME -->
+<div id="home" class="screen active">
 
-  <div class="icon green" onclick="openApp('messages')">Msg</div>
-  <div class="icon gray" onclick="openApp('camera')">Cam</div>
-  <div class="icon blue" onclick="openApp('browser')">Web</div>
-  <div class="icon yellow" onclick="openApp('photos')">Pics</div>
-  <div class="icon pink" onclick="openApp('music')">Music</div>
+  <div class="top">
+    <div class="icon gray">⚙️</div>
+    <div class="icon cyan">📶</div>
+    <div class="icon yellow">🔋</div>
+  </div>
+
+  <div class="grid">
+    <div class="icon green" onclick="openApp('messages')">Msg</div>
+    <div class="icon gray" onclick="openApp('camera')">Cam</div>
+    <div class="icon blue" onclick="openApp('browser')">Web</div>
+
+    <div class="icon pink" onclick="openApp('photos')">Pics</div>
+    <div class="icon cyan" onclick="openApp('weather')">Wx</div>
+    <div class="icon yellow" onclick="openApp('notes')">Note</div>
+
+    <div class="icon purple" onclick="openApp('music')">Music</div>
+    <div class="icon gray" onclick="openApp('settings')">Set</div>
+    <div class="icon blue" onclick="openApp('clock')">Clock</div>
+  </div>
+
+  <div class="dock">
+    <div class="icon green" onclick="openApp('phone')">Call</div>
+    <div class="icon blue" onclick="openApp('mail')">Mail</div>
+    <div class="icon yellow" onclick="openApp('browser')">Web</div>
+  </div>
 
 </div>
 
-<!-- MESSAGES -->
+<!-- APP SCREENS -->
+
 <div id="messages" class="screen">
   <div class="topbar">Messages</div>
   <p style="padding:20px;">No messages yet 📭</p>
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
-<!-- PHOTOS -->
 <div id="photos" class="screen">
   <div class="topbar">Photos</div>
   <p style="padding:20px;">No photos yet 🖼️</p>
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
-<!-- CAMERA -->
 <div id="camera" class="screen">
   <div class="topbar">Camera</div>
   <video id="cam" autoplay></video>
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
-<!-- BROWSER -->
 <div id="browser" class="screen">
   <div class="topbar">Browser</div>
   <iframe src="https://example.com"></iframe>
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
-<!-- MUSIC -->
 <div id="music" class="screen">
   <div class="topbar">Music</div>
   <p style="padding:20px;">No songs yet 🎵</p>
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
+<div id="settings" class="screen">
+  <div class="topbar">Settings</div>
+  <p style="padding:20px;">Pear OS Settings ⚙️</p>
+  <div class="back" onclick="goHome()">Back</div>
+</div>
+
+<div id="phone" class="screen">
+  <div class="topbar">Phone</div>
+  <p style="padding:20px;">Dialer coming soon ☎️</p>
+  <div class="back" onclick="goHome()">Back</div>
 </div>
 
 <script>
@@ -167,6 +205,8 @@ function goHome() {
   document.getElementById("home").classList.add('active');
 }
 </script>
+
+</div>
 
 </body>
 </html>
