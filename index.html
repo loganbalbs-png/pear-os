@@ -7,7 +7,7 @@
 <style>
 body {
   margin: 0;
-  background: linear-gradient(to bottom, #0a0a0a, #1e90ff);
+  background: radial-gradient(circle at center, #1a1a1a, #000);
   font-family: Arial;
   display: flex;
   justify-content: center;
@@ -16,9 +16,11 @@ body {
 .phone {
   width: 320px;
   height: 568px;
-  border-radius: 50px;
+  border-radius: 60px;
   margin-top: 20px;
-  background: radial-gradient(circle at center, #4da6ff, #0a0a0a);
+  background: radial-gradient(circle at center, #4da6ff, #000);
+  box-shadow: inset 0 0 40px rgba(255,255,255,0.2),
+              0 20px 40px rgba(0,0,0,0.9);
   padding: 15px;
   position: relative;
   overflow: hidden;
@@ -35,8 +37,8 @@ body {
 
 /* ICONS */
 .icon {
-  width: 62px;
-  height: 62px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
@@ -44,34 +46,31 @@ body {
   margin: 8px;
   font-size: 22px;
   color: white;
-  font-weight: bold;
 
-  background: radial-gradient(circle at 30% 30%, #ffffff55, #00000022);
   box-shadow:
-    inset 0 4px 8px rgba(255,255,255,0.4),
-    inset 0 -4px 8px rgba(0,0,0,0.4),
-    0 6px 12px rgba(0,0,0,0.6);
+    inset 0 4px 8px rgba(255,255,255,0.5),
+    inset 0 -4px 8px rgba(0,0,0,0.6),
+    0 6px 12px rgba(0,0,0,0.8);
 }
 
-/* COLORS */
-.green { background: #34c759; }
-.blue { background: #007aff; }
-.gray { background: #8e8e93; }
-.yellow { background: #ffcc00; }
-.pink { background: #ff2d55; }
-.purple { background: #af52de; }
-.cyan { background: #32ade6; }
-
-/* TOP WIDGETS */
-.top {
-  text-align: center;
-  margin-bottom: 10px;
-}
+/* ICON COLORS */
+.messages { background: linear-gradient(#4cd964, #2ecc71); }
+.camera { background: linear-gradient(#444, #111); }
+.browser { background: linear-gradient(#1e90ff, #0040ff); }
+.photos { background: linear-gradient(#ff2d55, #ff6b81); }
+.weather { background: linear-gradient(#5ac8fa, #007aff); }
+.notes { background: linear-gradient(#fff176, #fbc02d); color:black; }
+.music { background: linear-gradient(#1db954, #0a7d3b); }
+.settings { background: linear-gradient(#8e8e93, #4b4b4b); }
+.clock { background: linear-gradient(#ffffff, #d1d1d1); color:black; }
+.phoneApp { background: linear-gradient(#34c759, #1e7e34); }
+.mail { background: linear-gradient(#007aff, #003caa); }
 
 /* GRID */
-.grid {
-  text-align: center;
-}
+.grid { text-align: center; }
+
+/* TOP */
+.top { text-align:center; }
 
 /* DOCK */
 .dock {
@@ -81,7 +80,7 @@ body {
   text-align: center;
 }
 
-/* APP SCREENS */
+/* APP UI */
 .topbar {
   background: #007aff;
   color: white;
@@ -119,91 +118,65 @@ iframe {
 <!-- HOME -->
 <div id="home" class="screen active">
 
-  <div id="messages" class="screen">
-  <div class="topbar">Messages</div>
-
-  <div id="chat" style="padding:10px; height:75%; overflow-y:auto;">
-    <div style="background:#007aff; color:white; padding:8px; border-radius:10px; width:fit-content; margin-bottom:5px;">
-      Hey 👋
-    </div>
+  <div class="top">
+    <div class="icon settings">⚙️</div>
+    <div class="icon weather">📶</div>
+    <div class="icon notes">🔋</div>
   </div>
-
-  <div style="position:absolute; bottom:50px; width:100%; display:flex;">
-    <input id="msgInput" placeholder="Type a message..."
-      style="flex:1; padding:10px; border:none; border-radius:20px; margin-left:5px;">
-    <button onclick="sendMessage()" 
-      style="margin:5px; padding:10px; border:none; border-radius:10px; background:#34c759; color:white;">
-      Send
-    </button>
-  </div>
-
-  <div class="back" onclick="goHome()">Back</div>
-</div>
 
   <div class="grid">
-    <div class="icon green" onclick="openApp('messages')">Msg</div>
-    <div class="icon gray" onclick="openApp('camera')">Cam</div>
-    <div class="icon blue" onclick="openApp('browser')">Web</div>
+    <div class="icon messages" onclick="openApp('messages')">💬</div>
+    <div class="icon camera" onclick="openApp('camera')">📷</div>
+    <div class="icon browser" onclick="openApp('browser')">🌐</div>
 
-    <div class="icon pink" onclick="openApp('photos')">Pics</div>
-    <div class="icon cyan" onclick="openApp('weather')">Wx</div>
-    <div class="icon yellow" onclick="openApp('notes')">Note</div>
+    <div class="icon photos" onclick="openApp('photos')">🌸</div>
+    <div class="icon weather" onclick="openApp('weather')">☀️</div>
+    <div class="icon notes" onclick="openApp('notes')">📝</div>
 
-    <div class="icon purple" onclick="openApp('music')">Music</div>
-    <div class="icon gray" onclick="openApp('settings')">Set</div>
-    <div class="icon blue" onclick="openApp('clock')">Clock</div>
+    <div class="icon music" onclick="openSpotify()">🎵</div>
+    <div class="icon settings" onclick="openApp('settings')">⚙️</div>
+    <div class="icon clock" onclick="openApp('clock')">🕒</div>
   </div>
 
   <div class="dock">
-    <div class="icon green" onclick="openApp('phone')">Call</div>
-    <div class="icon blue" onclick="openApp('mail')">Mail</div>
-    <div class="icon yellow" onclick="openApp('browser')">Web</div>
+    <div class="icon phoneApp" onclick="openApp('phone')">📞</div>
+    <div class="icon mail" onclick="openApp('mail')">✉️</div>
+    <div class="icon browser" onclick="openApp('browser')">🌐</div>
   </div>
 
 </div>
 
-<!-- APP SCREENS -->
-
+<!-- MESSAGES -->
 <div id="messages" class="screen">
   <div class="topbar">Messages</div>
-  <p style="padding:20px;">No messages yet 📭</p>
+
+  <div id="chat" style="padding:10px; height:75%; overflow-y:auto;">
+    <div style="background:#007aff;color:white;padding:8px;border-radius:10px;width:fit-content;">Hey 👋</div>
+  </div>
+
+  <div style="position:absolute; bottom:50px; width:100%; display:flex;">
+    <input id="msgInput" placeholder="Type..."
+    style="flex:1; padding:10px; border-radius:20px;">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
-<div id="photos" class="screen">
-  <div class="topbar">Photos</div>
-  <p style="padding:20px;">No photos yet 🖼️</p>
-  <div class="back" onclick="goHome()">Back</div>
-</div>
-
+<!-- CAMERA -->
 <div id="camera" class="screen">
   <div class="topbar">Camera</div>
   <video id="cam" autoplay></video>
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
+<!-- BROWSER -->
 <div id="browser" class="screen">
   <div class="topbar">Browser</div>
   <iframe src="https://example.com"></iframe>
   <div class="back" onclick="goHome()">Back</div>
 </div>
 
-<div id="music" class="screen">
-  <div class="topbar">Music</div>
-  <p style="padding:20px;">No songs yet 🎵</p>
-  <div class="back" onclick="goHome()">Back</div>
-</div>
-
-<div id="settings" class="screen">
-  <div class="topbar">Settings</div>
-  <p style="padding:20px;">Pear OS Settings ⚙️</p>
-  <div class="back" onclick="goHome()">Back</div>
-</div>
-
-<div id="phone" class="screen">
-  <div class="topbar">Phone</div>
-  <p style="padding:20px;">Dialer coming soon ☎️</p>
-  <div class="back" onclick="goHome()">Back</div>
 </div>
 
 <script>
@@ -223,31 +196,31 @@ function goHome() {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById("home").classList.add('active');
 }
-</script function sendMessage() {
+
+function sendMessage() {
   let input = document.getElementById("msgInput");
   let chat = document.getElementById("chat");
 
   if(input.value.trim() !== "") {
     let msg = document.createElement("div");
-
     msg.style.background = "#34c759";
     msg.style.color = "white";
     msg.style.padding = "8px";
     msg.style.borderRadius = "10px";
-    msg.style.marginBottom = "5px";
-    msg.style.width = "fit-content";
+    msg.style.margin = "5px";
     msg.style.marginLeft = "auto";
-
     msg.innerText = input.value;
 
     chat.appendChild(msg);
     input.value = "";
-
-    chat.scrollTop = chat.scrollHeight;
   }
-}>
+}
 
-</div>
+/* OPEN SPOTIFY */
+function openSpotify() {
+  window.location.href = "https://open.spotify.com";
+}
+</script>
 
 </body>
 </html>
