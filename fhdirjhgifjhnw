@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(to bottom, #3aa0ff, #6fe7ff);
+  font-family: Arial;
+}
+.container {
+  width: 320px;
+  height: 568px;
+  margin: auto;
+  margin-top: 50px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 40px;
+  padding: 20px;
+}
+.icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 10px;
+}
+.green { background: limegreen; }
+.blue { background: dodgerblue; }
+.gray { background: gray; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="icon green"></div>
+  <div class="icon blue"></div>
+  <div class="icon gray"></div>
+</div>
+
+</body>
+</html>
