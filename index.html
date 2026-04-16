@@ -1,137 +1,78 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pear OS</title>
 
-export default function PearPhone() {
-  const [assistantOpen, setAssistantOpen] = useState(false);
-  const [screen, setScreen] = useState("home");
-
-  // Voice assistant ("Hey Mary")
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
-      if (transcript.includes("hey mary")) {
-        setAssistantOpen(true);
-        setTimeout(() => setAssistantOpen(false), 4000);
-      }
-    };
-
-    recognition.start();
-  }, []);
-
-  return (
-    <div
-      className="w-screen h-screen bg-cover bg-center text-white"
-      style={{ backgroundImage: "url('/pear-logo.png')" }}
-    >
-      {/* HOME SCREEN */}
-      {screen === "home" && (
-        <div className="grid grid-cols-4 gap-8 p-8">
-          <AppIcon name="Photos" img="/icons/photos.png" onClick={() => setScreen("photos")} />
-          <AppIcon name="App Store" img="/icons/appstore.png" onClick={() => setScreen("appstore")} />
-          <AppIcon name="Game" img="/icons/flappy.png" onClick={() => setScreen("game")} />
-        </div>
-      )}
-
-      {/* PHOTOS */}
-      {screen === "photos" && (
-        <div className="p-4">
-          <Button onClick={() => setScreen("home")}>Back</Button>
-          <div className="mt-4 flex justify-center">
-            <img
-              src="/your-image.jpg"
-              className="max-w-full max-h-[80vh] rounded-3xl shadow-2xl object-cover"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* APP STORE */}
-      {screen === "appstore" && (
-        <div className="p-4">
-          <Button onClick={() => setScreen("home")}>Back</Button>
-          <h1 className="text-2xl mt-4">App Store</h1>
-          <div className="mt-6">
-            <div className="flex items-center justify-between bg-white/10 p-4 rounded-2xl">
-              <div className="flex items-center gap-4">
-                <img src="/icons/flappy.png" className="w-14 h-14 rounded-xl" />
-                <span>Flappy Bird</span>
-              </div>
-              <Button onClick={() => setScreen("game")}>Download</Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* GAME */}
-      {screen === "game" && <FlappyBird onExit={() => setScreen("home")} />}
-
-      {/* ASSISTANT */}
-      {assistantOpen && (
-        <motion.div
-          initial={{ y: 80, opacity: 0 }}
-          animate={{ y: [0, -12, 0], opacity: 1 }}
-          transition={{ repeat: Infinity, duration: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-orange-500 px-8 py-4 rounded-full shadow-2xl text-lg"
-        >
-          🍊 Hey, I'm Mary
-        </motion.div>
-      )}
-    </div>
-  );
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(to bottom, #2d8cff, #5fe1ff);
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
 }
 
-function AppIcon({ name, img, onClick }) {
-  return (
-    <div onClick={onClick} className="flex flex-col items-center cursor-pointer">
-      <div className="w-16 h-16 bg-white/20 backdrop-blur-lg rounded-2xl flex items-center justify-center shadow-xl">
-        <img src={img} className="w-10 h-10" />
-      </div>
-      <span className="mt-2 text-sm">{name}</span>
-    </div>
-  );
+.phone {
+  width: 320px;
+  height: 568px;
+  border-radius: 40px;
+  margin-top: 40px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  position: relative;
 }
 
-function FlappyBird({ onExit }) {
-  const [birdY, setBirdY] = useState(200);
-  const [velocity, setVelocity] = useState(0);
-  const [score, setScore] = useState(0);
-
-  useEffect(() => {
-    const gravity = setInterval(() => {
-      setVelocity((v) => v + 1.5);
-      setBirdY((y) => y + velocity);
-      setScore((s) => s + 1);
-    }, 30);
-
-    const flap = () => setVelocity(-8);
-    window.addEventListener("click", flap);
-
-    return () => {
-      clearInterval(gravity);
-      window.removeEventListener("click", flap);
-    };
-  }, [velocity]);
-
-  return (
-    <div className="w-full h-full bg-gradient-to-b from-sky-300 to-blue-500 relative overflow-hidden">
-      <Button className="absolute top-4 left-4" onClick={onExit}>
-        Exit
-      </Button>
-
-      <div className="absolute top-4 right-4 text-xl">Score: {score}</div>
-
-      <div
-        className="w-10 h-10 bg-yellow-400 rounded-full absolute shadow-lg"
-        style={{ top: birdY, left: 100 }}
-      />
-    </div>
-  );
+.cluster {
+  background: rgba(255,255,255,0.15);
+  border-radius: 50px;
+  padding: 20px;
 }
+
+.icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 10px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+
+.green { background: #34c759; }
+.blue { background: #007aff; }
+.gray { background: #8e8e93; }
+.yellow { background: #ffcc00; }
+.pink { background: #ff2d55; }
+
+.dock {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+  <div class="cluster">
+    <div class="icon green"></div>
+    <div class="icon gray"></div>
+    <div class="icon blue"></div>
+    <div class="icon yellow"></div>
+    <div class="icon pink"></div>
+  </div>
+
+  <div class="dock">
+    <div class="icon green"></div>
+    <div class="icon blue"></div>
+    <div class="icon yellow"></div>
+  </div>
+
+</div>
+
+</body>
+</html>
