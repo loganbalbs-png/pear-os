@@ -7,10 +7,10 @@
 <style>
 body {
   margin: 0;
-  background: radial-gradient(circle at center, #1a1a1a, #000);
-  font-family: Arial;
+  background: radial-gradient(circle, #111, #000);
   display: flex;
   justify-content: center;
+  font-family: Arial;
 }
 
 .phone {
@@ -19,8 +19,6 @@ body {
   border-radius: 60px;
   margin-top: 20px;
   background: radial-gradient(circle at center, #4da6ff, #000);
-  box-shadow: inset 0 0 40px rgba(255,255,255,0.2),
-              0 20px 40px rgba(0,0,0,0.9);
   padding: 15px;
   position: relative;
   overflow: hidden;
@@ -37,76 +35,83 @@ body {
 
 /* ICONS */
 .icon {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   margin: 8px;
-  font-size: 22px;
+  font-size: 24px;
   color: white;
+  position: relative;
 
   box-shadow:
-    inset 0 4px 8px rgba(255,255,255,0.5),
-    inset 0 -4px 8px rgba(0,0,0,0.6),
-    0 6px 12px rgba(0,0,0,0.8);
+    inset 0 5px 10px rgba(255,255,255,0.6),
+    inset 0 -5px 10px rgba(0,0,0,0.6),
+    0 8px 14px rgba(0,0,0,0.9);
 }
 
-/* ICON COLORS */
-.messages { background: linear-gradient(#4cd964, #2ecc71); }
-.camera { background: linear-gradient(#444, #111); }
-.browser { background: linear-gradient(#1e90ff, #0040ff); }
-.photos { background: linear-gradient(#ff2d55, #ff6b81); }
-.weather { background: linear-gradient(#5ac8fa, #007aff); }
-.notes { background: linear-gradient(#fff176, #fbc02d); color:black; }
-.music { background: linear-gradient(#1db954, #0a7d3b); }
-.settings { background: linear-gradient(#8e8e93, #4b4b4b); }
-.clock { background: linear-gradient(#ffffff, #d1d1d1); color:black; }
-.phoneApp { background: linear-gradient(#34c759, #1e7e34); }
-.mail { background: linear-gradient(#007aff, #003caa); }
+.icon::after {
+  content:"";
+  position:absolute;
+  top:6px;
+  left:10px;
+  width:70%;
+  height:30%;
+  background:rgba(255,255,255,0.5);
+  border-radius:50%;
+}
+
+/* COLORS */
+.messages { background: linear-gradient(#6eff8a,#1fae4b); }
+.camera { background: linear-gradient(#666,#111); }
+.browser { background: linear-gradient(#4da6ff,#003cff); }
+.photos { background: linear-gradient(#ff4f7a,#ff1a4d); }
+.weather { background: linear-gradient(#6fd3ff,#007aff); }
+.notes { background: linear-gradient(#fff799,#ffd400); color:black;}
+.music { background: linear-gradient(#1ed760,#0a7d3b); }
+.settings { background: linear-gradient(#b0b0b0,#4b4b4b); }
+.clock { background: linear-gradient(#fff,#ccc); color:black;}
+.phoneApp { background: linear-gradient(#5aff7d,#1e8e3e); }
+.mail { background: linear-gradient(#4da6ff,#003cff); }
 
 /* GRID */
-.grid { text-align: center; }
+.grid { text-align:center; }
 
-/* TOP */
-.top { text-align:center; }
-
-/* DOCK */
-.dock {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
+/* EXIT BUTTON */
+.exit {
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:red;
+  color:white;
+  padding:5px 10px;
+  border-radius:10px;
 }
 
-/* APP UI */
+/* TOP BAR */
 .topbar {
-  background: #007aff;
-  color: white;
-  padding: 10px;
-  text-align: center;
+  text-align:center;
+  background:#007aff;
+  color:white;
+  padding:10px;
 }
 
-.back {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: #007aff;
-  color: white;
-  padding: 8px;
-  border-radius: 10px;
+/* INPUT */
+input, textarea {
+  width:90%;
+  margin:10px;
+  padding:10px;
+  border-radius:10px;
+  border:none;
 }
 
 /* CAMERA */
-video { width: 100%; }
+video { width:100%; }
 
 /* BROWSER */
-iframe {
-  width: 100%;
-  height: 85%;
-  border: none;
-}
+iframe { width:100%; height:80%; border:none; }
 
 </style>
 </head>
@@ -117,13 +122,6 @@ iframe {
 
 <!-- HOME -->
 <div id="home" class="screen active">
-
-  <div class="top">
-    <div class="icon settings">⚙️</div>
-    <div class="icon weather">📶</div>
-    <div class="icon notes">🔋</div>
-  </div>
-
   <div class="grid">
     <div class="icon messages" onclick="openApp('messages')">💬</div>
     <div class="icon camera" onclick="openApp('camera')">📷</div>
@@ -136,90 +134,136 @@ iframe {
     <div class="icon music" onclick="openSpotify()">🎵</div>
     <div class="icon settings" onclick="openApp('settings')">⚙️</div>
     <div class="icon clock" onclick="openApp('clock')">🕒</div>
-  </div>
 
-  <div class="dock">
     <div class="icon phoneApp" onclick="openApp('phone')">📞</div>
     <div class="icon mail" onclick="openApp('mail')">✉️</div>
-    <div class="icon browser" onclick="openApp('browser')">🌐</div>
   </div>
-
 </div>
 
 <!-- MESSAGES -->
 <div id="messages" class="screen">
-  <div class="topbar">Messages</div>
-
-  <div id="chat" style="padding:10px; height:75%; overflow-y:auto;">
-    <div style="background:#007aff;color:white;padding:8px;border-radius:10px;width:fit-content;">Hey 👋</div>
-  </div>
-
-  <div style="position:absolute; bottom:50px; width:100%; display:flex;">
-    <input id="msgInput" placeholder="Type..."
-    style="flex:1; padding:10px; border-radius:20px;">
-    <button onclick="sendMessage()">Send</button>
-  </div>
-
-  <div class="back" onclick="goHome()">Back</div>
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Messages</div>
+<div id="chat" style="height:60%;overflow:auto;padding:10px;"></div>
+<input id="msgInput" placeholder="Type message...">
+<button onclick="sendMessage()">Send</button>
 </div>
 
 <!-- CAMERA -->
 <div id="camera" class="screen">
-  <div class="topbar">Camera</div>
-  <video id="cam" autoplay></video>
-  <div class="back" onclick="goHome()">Back</div>
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Camera</div>
+<video id="cam" autoplay></video>
 </div>
 
 <!-- BROWSER -->
 <div id="browser" class="screen">
-  <div class="topbar">Browser</div>
-  <iframe src="https://example.com"></iframe>
-  <div class="back" onclick="goHome()">Back</div>
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Browser</div>
+<iframe src="https://example.com"></iframe>
+</div>
+
+<!-- PHOTOS -->
+<div id="photos" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Photos</div>
+<p style="padding:20px;">No photos yet 🖼️</p>
+</div>
+
+<!-- WEATHER -->
+<div id="weather" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Weather</div>
+<p style="padding:20px;">Sunny ☀️ 22°C</p>
+</div>
+
+<!-- NOTES -->
+<div id="notes" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Notes</div>
+<textarea id="note"></textarea>
+<button onclick="saveNote()">Save</button>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Settings</div>
+<p style="padding:20px;">Pear OS Settings ⚙️</p>
+</div>
+
+<!-- CLOCK -->
+<div id="clock" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Clock</div>
+<h1 id="time" style="text-align:center;"></h1>
+</div>
+
+<!-- PHONE -->
+<div id="phone" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Phone</div>
+<input placeholder="Enter number">
+<button>Call</button>
+</div>
+
+<!-- MAIL -->
+<div id="mail" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">Mail</div>
+<input placeholder="To">
+<textarea placeholder="Message"></textarea>
+<button>Send</button>
 </div>
 
 </div>
 
 <script>
-function openApp(app) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+function openApp(app){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(app).classList.add('active');
 
-  if(app === "camera") {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        document.getElementById("cam").srcObject = stream;
-      });
+  if(app==="camera"){
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(stream=>{document.getElementById("cam").srcObject=stream;});
   }
 }
 
-function goHome() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+function goHome(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById("home").classList.add('active');
 }
 
-function sendMessage() {
-  let input = document.getElementById("msgInput");
-  let chat = document.getElementById("chat");
-
-  if(input.value.trim() !== "") {
-    let msg = document.createElement("div");
-    msg.style.background = "#34c759";
-    msg.style.color = "white";
-    msg.style.padding = "8px";
-    msg.style.borderRadius = "10px";
-    msg.style.margin = "5px";
-    msg.style.marginLeft = "auto";
-    msg.innerText = input.value;
-
+function sendMessage(){
+  let input=document.getElementById("msgInput");
+  let chat=document.getElementById("chat");
+  if(input.value){
+    let msg=document.createElement("div");
+    msg.innerText=input.value;
+    msg.style.background="#34c759";
+    msg.style.color="white";
+    msg.style.padding="8px";
+    msg.style.margin="5px";
+    msg.style.borderRadius="10px";
     chat.appendChild(msg);
-    input.value = "";
+    input.value="";
   }
 }
 
-/* OPEN SPOTIFY */
-function openSpotify() {
-  window.location.href = "https://open.spotify.com";
+function saveNote(){
+  localStorage.setItem("pearNote",document.getElementById("note").value);
 }
+
+document.getElementById("note").value=localStorage.getItem("pearNote")||"";
+
+function openSpotify(){
+  window.location.href="https://open.spotify.com";
+}
+
+setInterval(()=>{
+  let d=new Date();
+  document.getElementById("time").innerText=d.toLocaleTimeString();
+},1000);
 </script>
 
 </body>
