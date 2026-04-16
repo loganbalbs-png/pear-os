@@ -17,26 +17,41 @@ body {
   width: 320px;
   height: 568px;
   border-radius: 40px;
-  margin-top: 40px;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  padding: 20px;
+  margin-top: 30px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
+  overflow: hidden;
   position: relative;
 }
 
-.cluster {
-  background: rgba(255,255,255,0.15);
-  border-radius: 50px;
-  padding: 20px;
+/* SCREENS */
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+/* HOME */
+.home {
+  padding: 15px;
 }
 
 .icon {
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   display: inline-block;
   margin: 10px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  text-align: center;
+  line-height: 65px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .green { background: #34c759; }
@@ -44,13 +59,41 @@ body {
 .gray { background: #8e8e93; }
 .yellow { background: #ffcc00; }
 .pink { background: #ff2d55; }
+.purple { background: #af52de; }
 
-.dock {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
+/* TOP BAR */
+.topbar {
+  background: #007aff;
+  color: white;
+  padding: 10px;
   text-align: center;
+  font-weight: bold;
 }
+
+/* BACK BUTTON */
+.back {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: #007aff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+/* CAMERA */
+video {
+  width: 100%;
+  height: auto;
+}
+
+/* BROWSER */
+iframe {
+  width: 100%;
+  height: 90%;
+  border: none;
+}
+
 </style>
 </head>
 
@@ -58,21 +101,72 @@ body {
 
 <div class="phone">
 
-  <div class="cluster">
-    <div class="icon green"></div>
-    <div class="icon gray"></div>
-    <div class="icon blue"></div>
-    <div class="icon yellow"></div>
-    <div class="icon pink"></div>
-  </div>
+<!-- HOME SCREEN -->
+<div id="home" class="screen active home">
 
-  <div class="dock">
-    <div class="icon green"></div>
-    <div class="icon blue"></div>
-    <div class="icon yellow"></div>
-  </div>
+  <div class="icon green" onclick="openApp('messages')">Msg</div>
+  <div class="icon gray" onclick="openApp('camera')">Cam</div>
+  <div class="icon blue" onclick="openApp('browser')">Web</div>
+  <div class="icon yellow" onclick="openApp('photos')">Pics</div>
+  <div class="icon pink" onclick="openApp('music')">Music</div>
 
 </div>
+
+<!-- MESSAGES -->
+<div id="messages" class="screen">
+  <div class="topbar">Messages</div>
+  <p style="padding:20px;">No messages yet 📭</p>
+  <div class="back" onclick="goHome()">Back</div>
+</div>
+
+<!-- PHOTOS -->
+<div id="photos" class="screen">
+  <div class="topbar">Photos</div>
+  <p style="padding:20px;">No photos yet 🖼️</p>
+  <div class="back" onclick="goHome()">Back</div>
+</div>
+
+<!-- CAMERA -->
+<div id="camera" class="screen">
+  <div class="topbar">Camera</div>
+  <video id="cam" autoplay></video>
+  <div class="back" onclick="goHome()">Back</div>
+</div>
+
+<!-- BROWSER -->
+<div id="browser" class="screen">
+  <div class="topbar">Browser</div>
+  <iframe src="https://example.com"></iframe>
+  <div class="back" onclick="goHome()">Back</div>
+</div>
+
+<!-- MUSIC -->
+<div id="music" class="screen">
+  <div class="topbar">Music</div>
+  <p style="padding:20px;">No songs yet 🎵</p>
+  <div class="back" onclick="goHome()">Back</div>
+</div>
+
+</div>
+
+<script>
+function openApp(app) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(app).classList.add('active');
+
+  if(app === "camera") {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        document.getElementById("cam").srcObject = stream;
+      });
+  }
+}
+
+function goHome() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById("home").classList.add('active');
+}
+</script>
 
 </body>
 </html>
