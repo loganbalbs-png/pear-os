@@ -219,7 +219,29 @@ function goHome() {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById("home").classList.add('active');
 }
-</script>
+</scriptfunction sendMessage() {
+  let input = document.getElementById("msgInput");
+  let chat = document.getElementById("chat");
+
+  if(input.value.trim() !== "") {
+    let msg = document.createElement("div");
+
+    msg.style.background = "#34c759";
+    msg.style.color = "white";
+    msg.style.padding = "8px";
+    msg.style.borderRadius = "10px";
+    msg.style.marginBottom = "5px";
+    msg.style.width = "fit-content";
+    msg.style.marginLeft = "auto";
+
+    msg.innerText = input.value;
+
+    chat.appendChild(msg);
+    input.value = "";
+
+    chat.scrollTop = chat.scrollHeight;
+  }
+}>
 
 </div>
 
