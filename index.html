@@ -2,18 +2,17 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pear Phone OS</title>
+<title>Pear Phone</title>
 
 <style>
 body {
   margin:0;
-  background:black;
+  background:#000;
   display:flex;
   justify-content:center;
   font-family:sans-serif;
 }
 
-/* PHONE */
 .phone {
   width:320px;
   height:580px;
@@ -24,54 +23,30 @@ body {
   overflow:hidden;
 }
 
-/* BRIGHTNESS OVERLAY */
-#brightnessOverlay {
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:black;
-  opacity:0;
-  pointer-events:none;
-}
+/* ICON GRID */
+.grid { text-align:center; }
 
-/* LOCK SCREEN */
-#lock {
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:black;
+/* ICON + LABEL */
+.app {
+  display:inline-block;
+  margin:8px;
+  text-align:center;
   color:white;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  font-size:12px;
 }
 
-input {
-  padding:10px;
-  margin:10px;
-  border-radius:10px;
-  border:none;
-}
-
-/* SCREENS */
-.screen { display:none; position:absolute; width:100%; height:100%; }
-.active { display:block; }
-
-/* ICONS */
 .icon {
   width:60px;
   height:60px;
   border-radius:50%;
-  margin:10px;
-  display:inline-block;
   background-size:cover;
-  box-shadow: inset 0 5px 10px rgba(255,255,255,0.6),
-              inset 0 -5px 10px rgba(0,0,0,0.6),
-              0 6px 12px rgba(0,0,0,0.9);
+  box-shadow:
+    inset 0 5px 10px rgba(255,255,255,0.6),
+    inset 0 -5px 10px rgba(0,0,0,0.6),
+    0 6px 12px rgba(0,0,0,0.9);
 }
 
-/* ICON IMAGES (close to Pear look) */
+/* ICON COLORS (PEAR STYLE) */
 .msg { background:#5eff8a; }
 .cam { background:#777; }
 .photos { background:#ff4f7a; }
@@ -83,11 +58,12 @@ input {
 .clock { background:#fff; }
 .browser { background:#1e90ff; }
 .phoneApp { background:#34c759; }
-.mail { background:#007aff; }
+.appstore { background:#00c7ff; }
 .mary { background:linear-gradient(red,blue,yellow); }
 
-/* GRID */
-.grid { text-align:center; }
+/* SCREENS */
+.screen { display:none; position:absolute; width:100%; height:100%; }
+.active { display:block; }
 
 /* EXIT */
 .exit {
@@ -99,6 +75,14 @@ input {
   padding:5px;
 }
 
+/* TOPBAR */
+.topbar {
+  background:#007aff;
+  color:white;
+  text-align:center;
+  padding:10px;
+}
+
 /* CAMERA */
 video, canvas { width:100%; }
 
@@ -108,13 +92,18 @@ video, canvas { width:100%; }
   margin:5px;
 }
 
-/* TOPBAR */
-.topbar {
-  background:#007aff;
-  color:white;
-  text-align:center;
-  padding:10px;
+/* BRIGHTNESS */
+#overlay {
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:black;
+  opacity:0;
+  pointer-events:none;
 }
+
+input, textarea { width:90%; margin:10px; padding:10px; }
+
 </style>
 </head>
 
@@ -122,43 +111,46 @@ video, canvas { width:100%; }
 
 <div class="phone">
 
-<div id="brightnessOverlay"></div>
-
-<!-- LOCK -->
-<div id="lock">
-<h2>Enter Passcode</h2>
-<input id="pass">
-<button onclick="unlock()">Unlock</button>
-</div>
+<div id="overlay"></div>
 
 <!-- HOME -->
-<div id="home" class="screen">
-<div class="grid">
-<div class="icon msg" onclick="openApp('messages')"></div>
-<div class="icon cam" onclick="openApp('camera')"></div>
-<div class="icon photos" onclick="openApp('photos')"></div>
+<div id="home" class="screen active">
+<div class="grid" id="apps">
 
-<div class="icon maps" onclick="openApp('maps')"></div>
-<div class="icon notes" onclick="openApp('notes')"></div>
-<div class="icon weather" onclick="openApp('weather')"></div>
+<div class="app"><div class="icon msg" onclick="openApp('messages')"></div>Messages</div>
+<div class="app"><div class="icon cam" onclick="openApp('camera')"></div>Camera</div>
+<div class="app"><div class="icon photos" onclick="openApp('photos')"></div>Photos</div>
 
-<div class="icon music" onclick="openSpotify()"></div>
-<div class="icon settings" onclick="openApp('settings')"></div>
-<div class="icon clock" onclick="openApp('clock')"></div>
+<div class="app"><div class="icon maps" onclick="openApp('maps')"></div>Maps</div>
+<div class="app"><div class="icon notes" onclick="openApp('notes')"></div>Notes</div>
+<div class="app"><div class="icon weather" onclick="openApp('weather')"></div>Weather</div>
 
-<div class="icon browser" onclick="openApp('browser')"></div>
-<div class="icon phoneApp" onclick="openApp('phone')"></div>
-<div class="icon mary" onclick="openApp('mary')"></div>
+<div class="app"><div class="icon music" onclick="openSpotify()"></div>PearTunes</div>
+<div class="app"><div class="icon settings" onclick="openApp('settings')"></div>Settings</div>
+<div class="app"><div class="icon clock" onclick="openApp('clock')"></div>Clock</div>
+
+<div class="app"><div class="icon browser" onclick="openApp('browser')"></div>Browser</div>
+<div class="app"><div class="icon phoneApp" onclick="openApp('phone')"></div>Phone</div>
+<div class="app"><div class="icon mary" onclick="openApp('mary')"></div>Mary</div>
+
+<div class="app"><div class="icon appstore" onclick="openApp('store')"></div>App Store</div>
+
 </div>
 </div>
 
-<!-- MESSAGES -->
-<div id="messages" class="screen">
+<!-- MARY (VOICE AI) -->
+<div id="mary" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Messages</div>
-<div id="chat"></div>
-<input id="msgInput">
-<button onclick="sendMessage()">Send</button>
+<div class="topbar">Mary</div>
+<button onclick="talk()">🎤 Talk</button>
+<p id="maryText"></p>
+</div>
+
+<!-- APP STORE -->
+<div id="store" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div class="topbar">App Store</div>
+<button onclick="installApp('game')">Install Game</button>
 </div>
 
 <!-- CAMERA -->
@@ -181,79 +173,20 @@ video, canvas { width:100%; }
 <div id="settings" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <div class="topbar">Settings</div>
+
 <p>Brightness</p>
 <input type="range" min="0" max="1" step="0.1" onchange="setBrightness(this.value)">
-</div>
 
-<!-- CLOCK -->
-<div id="clock" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Clock</div>
-<h1 id="time"></h1>
-</div>
+<p>Change Passcode</p>
+<input id="newPass">
+<button onclick="changePass()">Save</button>
 
-<!-- PHONE -->
-<div id="phone" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Phone</div>
-<p>Your number: 555-1234</p>
-<input placeholder="Enter number">
-<button onclick="alert('Calling...')">Call</button>
-</div>
-
-<!-- BROWSER -->
-<div id="browser" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Browser</div>
-<iframe src="https://example.com" style="width:100%;height:80%;"></iframe>
-</div>
-
-<!-- NOTES -->
-<div id="notes" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Notes</div>
-<textarea id="note"></textarea>
-<button onclick="saveNote()">Save</button>
-</div>
-
-<!-- MAPS -->
-<div id="maps" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Maps</div>
-<p>Map loading...</p>
-</div>
-
-<!-- WEATHER -->
-<div id="weather" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Weather</div>
-<p>Sunny ☀️ 22°C</p>
-</div>
-
-<!-- MARY (SIRI) -->
-<div id="mary" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div class="topbar">Mary</div>
-<button onclick="speak()">Talk</button>
-<p id="maryText"></p>
 </div>
 
 </div>
 
 <script>
 let passcode="1234";
-
-/* LOCK */
-function unlock(){
-  if(document.getElementById("pass").value===passcode){
-    document.getElementById("lock").style.display="none";
-    openHome();
-  } else alert("Wrong passcode");
-}
-
-function openHome(){
-document.getElementById("home").classList.add("active");
-}
 
 /* NAV */
 function openApp(app){
@@ -262,62 +195,47 @@ document.getElementById(app).classList.add('active');
 
 if(app==="camera"){
 navigator.mediaDevices.getUserMedia({video:true})
-.then(stream=>{cam.srcObject=stream;});
+.then(stream=>cam.srcObject=stream);
 }
 if(app==="photos") loadPhotos();
 }
 
 function goHome(){
 document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-document.getElementById("home").classList.add('active');
+home.classList.add('active');
 }
 
-/* CAMERA SAVE */
+/* CAMERA */
 function takePhoto(){
-let c=canvas;
-c.width=cam.videoWidth;
-c.height=cam.videoHeight;
-c.getContext("2d").drawImage(cam,0,0);
-let data=c.toDataURL();
+canvas.width=cam.videoWidth;
+canvas.height=cam.videoHeight;
+canvas.getContext("2d").drawImage(cam,0,0);
+
+let data=canvas.toDataURL();
 let photos=JSON.parse(localStorage.getItem("photos")||"[]");
 photos.push(data);
 localStorage.setItem("photos",JSON.stringify(photos));
 }
 
-/* LOAD PHOTOS */
 function loadPhotos(){
-let g=document.getElementById("gallery");
-g.innerHTML="";
+gallery.innerHTML="";
 let photos=JSON.parse(localStorage.getItem("photos")||"[]");
 photos.forEach(p=>{
 let img=document.createElement("img");
 img.src=p;
-g.appendChild(img);
+gallery.appendChild(img);
 });
 }
 
-/* MESSAGES */
-function sendMessage(){
-let msg=document.createElement("div");
-msg.innerText=msgInput.value;
-chat.appendChild(msg);
-msgInput.value="";
-}
-
-/* NOTES */
-function saveNote(){
-localStorage.setItem("note",note.value);
-}
-note.value=localStorage.getItem("note")||"";
-
-/* CLOCK */
-setInterval(()=>{
-time.innerText=new Date().toLocaleTimeString();
-},1000);
-
 /* BRIGHTNESS */
 function setBrightness(v){
-document.getElementById("brightnessOverlay").style.opacity=v;
+overlay.style.opacity=v;
+}
+
+/* PASSCODE */
+function changePass(){
+passcode=document.getElementById("newPass").value;
+alert("Passcode updated");
 }
 
 /* SPOTIFY */
@@ -325,11 +243,26 @@ function openSpotify(){
 window.location.href="https://open.spotify.com";
 }
 
-/* MARY AI */
-function speak(){
-let text="Hello, I am Mary!";
-maryText.innerText=text;
-speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+/* APP STORE */
+function installApp(name){
+let div=document.createElement("div");
+div.className="app";
+div.innerHTML='<div class="icon" style="background:orange;"></div>'+name;
+apps.appendChild(div);
+}
+
+/* MARY VOICE */
+function talk(){
+let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.start();
+
+recognition.onresult = function(e){
+let text = e.results[0][0].transcript;
+maryText.innerText = "You: " + text;
+
+let response = "I heard you say " + text;
+speechSynthesis.speak(new SpeechSynthesisUtterance(response));
+};
 }
 </script>
 
