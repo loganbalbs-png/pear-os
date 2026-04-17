@@ -2,29 +2,116 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pear Phone</title>
+<title>Mary Assistant</title>
 
 <style>
 body {
   margin:0;
   background:black;
+  font-family:sans-serif;
+  color:white;
   display:flex;
   justify-content:center;
-  font-family:sans-serif;
+  align-items:center;
+  height:100vh;
 }
 
-/* PHONE */
-.phone {
-  width:320px;
-  height:580px;
-  border-radius:60px;
-  background:url('https://i.imgur.com/8QZ7Z9Y.png') center/cover;
-  padding:15px;
-  position:relative;
-  overflow:hidden;
+/* MARY ORB */
+#mary {
+  position:fixed;
+  bottom:-120px;
+  left:50%;
+  transform:translateX(-50%);
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background: radial-gradient(circle, orange, red);
+  box-shadow:0 0 30px orange;
+  transition:0.5s;
 }
 
-/* GRID */
-.grid { text-align:center; }
+/* FLOAT ANIMATION */
+.active {
+  bottom:40px;
+  animation: float 2s infinite ease-in-out;
+}
 
-/* APP
+@keyframes float {
+  0% { transform:translateX(-50%) translateY(0); }
+  50% { transform:translateX(-50%) translateY(-15px); }
+  100% { transform:translateX(-50%) translateY(0); }
+}
+
+/* TEXT */
+#text {
+  position:absolute;
+  bottom:160px;
+  text-align:center;
+  width:100%;
+}
+</style>
+</head>
+
+<body>
+
+<div id="text">Say "Hey Mary"</div>
+<div id="mary"></div>
+
+<script>
+let recognition;
+
+/* START LISTENING */
+function startListening(){
+  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.continuous = true;
+  recognition.start();
+
+  recognition.onresult = function(e){
+    let speech = e.results[e.results.length - 1][0].transcript.toLowerCase();
+
+    if(speech.includes("hey mary")){
+      activateMary();
+    }
+  };
+}
+
+/* ACTIVATE */
+function activateMary(){
+  document.getElementById("mary").classList.add("active");
+  document.getElementById("text").innerText = "Listening...";
+
+  listenCommand();
+}
+
+/* LISTEN AFTER ACTIVATION */
+function listenCommand(){
+  let commandRec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  commandRec.start();
+
+  commandRec.onresult = function(e){
+    let command = e.results[0][0].transcript;
+    respond(command);
+  };
+}
+
+/* RESPOND */
+function respond(cmd){
+  let reply = "You said " + cmd;
+
+  document.getElementById("text").innerText = reply;
+
+  let speech = new SpeechSynthesisUtterance(reply);
+  speechSynthesis.speak(speech);
+
+  setTimeout(() => {
+    document.getElementById("mary").classList.remove("active");
+    document.getElementById("text").innerText = "Say 'Hey Mary'";
+  }, 4000);
+}
+
+/* START */
+startListening();
+</script>
+
+</body>
+</html>
