@@ -25,7 +25,7 @@ body{
   color:white;
 }
 
-/* LOCK SCREEN */
+/* LOCK */
 #lock{
   position:absolute;
   width:100%;height:100%;
@@ -68,18 +68,21 @@ body{
   font-size:11px;
 }
 
+/* PEAR ICON STYLE */
 .icon{
   width:70px;height:70px;
   border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, #fff6, transparent),
+             linear-gradient(#4da6ff,#003c99);
+  box-shadow:0 10px 20px rgba(0,0,0,0.7),
+             inset 0 5px 10px rgba(255,255,255,0.4);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.7),
-             inset 0 5px 10px rgba(255,255,255,0.4);
+  font-size:20px;
 }
 
-/* COLORS (Pear style) */
+/* COLORS */
 .msg{background:linear-gradient(#6fff7a,#00a63c);}
 .cam{background:linear-gradient(#ddd,#555);}
 .photos{background:linear-gradient(#ff7,#f06);}
@@ -103,6 +106,22 @@ body{
 @keyframes openApp{
   from{transform:scale(0.8);opacity:0;}
   to{transform:scale(1);opacity:1;}
+}
+
+/* MARY */
+#mary{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:70px;height:70px;
+  border-radius:50%;
+  background:radial-gradient(circle,orange,yellow);
+  display:none;
+  animation:float 2s infinite;
+}
+@keyframes float{
+  50%{transform:translateX(-50%) translateY(-10px);}
 }
 
 </style>
@@ -167,8 +186,7 @@ body{
 <!-- BROWSER -->
 <div id="browser" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<input id="search">
-<button onclick="goSearch()">Go</button>
+<input id="search"><button onclick="goSearch()">Go</button>
 <iframe id="frame" style="width:100%;height:80%"></iframe>
 </div>
 
@@ -196,13 +214,15 @@ oninput="document.body.style.filter='brightness('+this.value+')'">
 
 </div>
 
+<!-- MARY -->
+<div id="mary"></div>
+
 </div>
 
 <script>
 
 /* LOCK */
 let pass="1234",input="";
-
 function press(n){
   input+=n;
   dots.children[input.length-1].classList.add("fill");
@@ -212,7 +232,7 @@ function press(n){
       lock.style.display="none";
       document.getElementById("home").classList.add("active");
     }else{
-      alert("Wrong passcode");
+      alert("Wrong");
       input="";
       [...dots.children].forEach(d=>d.classList.remove("fill"));
     }
@@ -269,7 +289,6 @@ function goSearch(){
 
 /* GAME */
 let ctx=g.getContext("2d"),y=150,v=0;
-
 function loop(){
   ctx.clearRect(0,0,300,400);
   v+=0.5;y+=v;
@@ -277,7 +296,6 @@ function loop(){
   requestAnimationFrame(loop);
 }
 loop();
-
 document.addEventListener("click",()=>v=-8);
 
 /* STORE */
@@ -287,6 +305,50 @@ function installApp(name,emoji){
   div.innerHTML=`<div class="icon">${emoji}</div>${name}`;
   apps.appendChild(div);
 }
+
+/* 🤖 MARY (SASSY) */
+const mary=document.getElementById("mary");
+
+function speak(t){
+  speechSynthesis.speak(new SpeechSynthesisUtterance(t));
+}
+
+function reply(text){
+  if(text.includes("time"))
+    return "I don’t know, go look outside.";
+
+  if(text.includes("hi"))
+    return "Wow. A greeting. Amazing.";
+
+  if(text.includes("go home")){
+    goHome();
+    return "Relax, I got it.";
+  }
+
+  if(text.includes("open camera")){
+    openApp("camera");
+    return "There. Try not to break it.";
+  }
+
+  return "I'm not impressed.";
+}
+
+/* VOICE */
+const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
+rec.continuous=true;
+
+rec.onresult=e=>{
+  let text=e.results[e.results.length-1][0].transcript.toLowerCase();
+
+  if(text.includes("hey mary")){
+    mary.style.display="block";
+    speak("What now?");
+  }else{
+    speak(reply(text));
+  }
+};
+
+rec.start();
 
 </script>
 
