@@ -20,37 +20,43 @@ body{
   height:600px;
   border-radius:60px;
   background:#0a2a66;
-  overflow:hidden;
   position:relative;
+  overflow:hidden;
   color:white;
 }
 
-/* FLOATING BUBBLES */
-.topbar{
+/* 🔺 TRIANGLE BUBBLES */
+.top{
   position:absolute;
   top:10px;
   width:100%;
   display:flex;
-  justify-content:space-around;
-  z-index:5;
+  justify-content:center;
+}
+
+.triangle{
+  position:relative;
+  width:200px;
+  height:80px;
 }
 
 .bubble{
-  width:55px;
-  height:55px;
+  width:50px;
+  height:50px;
   border-radius:50%;
   background:radial-gradient(circle,#222,#000);
+  position:absolute;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:10px;
-  text-align:center;
-  animation:float 3s infinite ease-in-out;
-  box-shadow:0 5px 15px rgba(0,0,0,0.8);
+  font-size:11px;
+  animation:float 3s infinite;
 }
 
-.bubble:nth-child(2){animation-delay:0.5s;}
-.bubble:nth-child(3){animation-delay:1s;}
+/* triangle positions */
+.b1{left:0; top:30px;}
+.b2{right:0; top:30px;}
+.b3{left:75px; top:0;}
 
 @keyframes float{
   0%{transform:translateY(0);}
@@ -63,30 +69,36 @@ body{
 .active{display:block;}
 
 /* GRID */
-.grid{text-align:center;margin-top:90px;}
+.grid{
+  margin-top:100px;
+  text-align:center;
+}
 
-.app{display:inline-block;margin:10px;font-size:11px;}
+/* APP */
+.app{
+  display:inline-block;
+  margin:12px;
+  font-size:11px;
+}
 
-/* PEAR ICONS */
+/* REALISTIC ICONS */
 .icon{
   width:65px;
   height:65px;
   border-radius:50%;
-  background:radial-gradient(circle at top,#ffffff55,#000);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:24px;
-  box-shadow:inset 0 3px 8px rgba(255,255,255,0.4),
-             0 10px 15px rgba(0,0,0,0.9);
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 8px 15px rgba(0,0,0,0.8),
+             inset 0 3px 6px rgba(255,255,255,0.4);
 }
 
-/* ICON COLORS */
-.green{background:radial-gradient(circle,#2ecc71,#145a32);}
-.blue{background:radial-gradient(circle,#3498db,#154360);}
-.orange{background:radial-gradient(circle,#e67e22,#6e2c00);}
-.purple{background:radial-gradient(circle,#9b59b6,#4a235a);}
-.gray{background:radial-gradient(circle,#bdc3c7,#424949);}
+/* ICON IMAGES */
+.msg{background-image:url('https://cdn-icons-png.flaticon.com/512/2462/2462719.png');}
+.cam{background-image:url('https://cdn-icons-png.flaticon.com/512/685/685655.png');}
+.music{background-image:url('https://cdn-icons-png.flaticon.com/512/727/727269.png');}
+.photos{background-image:url('https://cdn-icons-png.flaticon.com/512/1829/1829586.png');}
+.browser{background-image:url('https://cdn-icons-png.flaticon.com/512/841/841364.png');}
+.settings{background-image:url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png');}
 
 /* EXIT */
 .exit{
@@ -94,7 +106,8 @@ body{
   top:10px;
   right:10px;
   background:red;
-  padding:5px;
+  padding:6px;
+  border-radius:8px;
 }
 
 /* MARY */
@@ -116,44 +129,46 @@ body{
 
 <div class="phone" id="phone">
 
-<!-- FLOATING TOP BUBBLES -->
-<div class="topbar">
-  <div class="bubble">☀️<br>23°</div>
-  <div class="bubble" id="time"></div>
-  <div class="bubble" onclick="openApp('settings')">⚙️</div>
+<!-- 🔺 TRIANGLE BUBBLES -->
+<div class="top">
+  <div class="triangle">
+    <div class="bubble b1">☀️ 23°</div>
+    <div class="bubble b2" id="time"></div>
+    <div class="bubble b3" onclick="openApp('settings')">⚙️</div>
+  </div>
 </div>
 
 <!-- HOME -->
 <div id="home" class="screen active">
-<div class="grid" id="apps">
+<div class="grid">
 
 <div class="app">
-<div class="icon green" onclick="openApp('messages')">💬</div>
+<div class="icon msg" onclick="openApp('messages')"></div>
 Messages
 </div>
 
 <div class="app">
-<div class="icon gray" onclick="openApp('camera')">📷</div>
+<div class="icon cam" onclick="openApp('camera')"></div>
 Camera
 </div>
 
 <div class="app">
-<div class="icon blue" onclick="openApp('browser')">🌐</div>
-Pear Brows
+<div class="icon music" onclick="openApp('music')"></div>
+PearTunes
 </div>
 
 <div class="app">
-<div class="icon orange" onclick="openApp('photos')">🖼️</div>
+<div class="icon photos" onclick="openApp('photos')"></div>
 Photos
 </div>
 
 <div class="app">
-<div class="icon purple" onclick="openApp('store')">🛍️</div>
-Store
+<div class="icon browser" onclick="openApp('browser')"></div>
+Pear Brows
 </div>
 
 <div class="app">
-<div class="icon gray" onclick="openApp('settings')">⚙️</div>
+<div class="icon settings" onclick="openApp('settings')"></div>
 Settings
 </div>
 
@@ -163,21 +178,21 @@ Settings
 <!-- SETTINGS -->
 <div id="settings" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
+<h3>Settings</h3>
 
-<h3>Customize</h3>
-
-<button onclick="phone.style.background='#1a4fff'">Blue</button>
 <button onclick="phone.style.background='#000'">Black</button>
-<button onclick="phone.style.background='#4b0082'">Purple</button>
+<button onclick="phone.style.background='#1a4fff'">Blue</button>
 
 </div>
 
 <!-- BROWSER -->
 <div id="browser" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
+
 <input id="search" placeholder="Search...">
 <button onclick="frame.src='https://www.bing.com/search?q='+search.value">Go</button>
 <iframe id="frame" style="width:100%;height:80%"></iframe>
+
 </div>
 
 <!-- CAMERA -->
@@ -194,16 +209,11 @@ Settings
 <div id="gallery"></div>
 </div>
 
-<!-- STORE -->
-<div id="store" class="screen">
+<!-- MUSIC -->
+<div id="music" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<button onclick="installGame()">Install Game</button>
-</div>
-
-<!-- GAME -->
-<div id="flappy" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<canvas id="game" width="300" height="400"></canvas>
+<h3>PearTunes</h3>
+<p>Music player coming soon 🎵</p>
 </div>
 
 <div id="mary"></div>
@@ -259,60 +269,7 @@ function loadPhotos(){
   });
 }
 
-/* STORE */
-function installGame(){
-  let app=document.createElement("div");
-  app.className="app";
-  app.innerHTML=`
-    <div class="icon orange"
-    onclick="openApp('flappy'); startGame();">🎮</div>
-    Game
-  `;
-  apps.appendChild(app);
-}
-
-/* SIMPLE GAME */
-let ctx=document.getElementById("game").getContext("2d");
-let bird,pipes,run;
-
-function startGame(){
-  bird={x:50,y:150,v:0};
-  pipes=[];
-  run=true;
-  spawn(); loop();
-}
-
-function spawn(){
-  let top=Math.random()*200;
-  pipes.push({x:300,top,bottom:top+120});
-  if(run)setTimeout(spawn,1500);
-}
-
-function loop(){
-  if(!run)return;
-  ctx.clearRect(0,0,300,400);
-
-  bird.v+=0.5;
-  bird.y+=bird.v;
-  ctx.fillRect(bird.x,bird.y,20,20);
-
-  pipes.forEach(p=>{
-    p.x-=2;
-    ctx.fillRect(p.x,0,30,p.top);
-    ctx.fillRect(p.x,p.bottom,30,400);
-
-    if(bird.x<p.x+30 && bird.x+20>p.x &&
-       (bird.y<p.top||bird.y+20>p.bottom)){
-      run=false;
-    }
-  });
-
-  requestAnimationFrame(loop);
-}
-
-document.addEventListener("click",()=>{if(run)bird.v=-8});
-
-/* MARY */
+/* 🎤 MARY */
 const mary=document.getElementById("mary");
 
 function speak(t){
@@ -321,6 +278,7 @@ function speak(t){
 
 function reply(input){
   if(input.includes("1+1")) return "It's two... how do you not know that?";
+  if(input.includes("go home")) { goHome(); return "Going home."; }
   if(input.includes("hi")) return "Hey! I'm Mary.";
   return "I'm still learning.";
 }
