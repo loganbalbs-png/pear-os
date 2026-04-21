@@ -5,51 +5,89 @@
 <title>Pear Phone</title>
 
 <style>
-body {
+body{
   margin:0;
   background:black;
   display:flex;
   justify-content:center;
+  align-items:center;
+  height:100vh;
   font-family:sans-serif;
 }
 
-.phone {
+/* PHONE BODY */
+.phone{
   width:320px;
-  height:580px;
+  height:600px;
   border-radius:60px;
-  background: radial-gradient(circle,#1a5cff,#000);
+  background: radial-gradient(circle at top,#2c3e50,#000);
   padding:15px;
+  box-shadow:0 0 40px rgba(0,0,0,0.9);
   position:relative;
   overflow:hidden;
 }
 
-.grid { text-align:center; }
+/* HOME GRID */
+.grid{
+  text-align:center;
+  margin-top:80px;
+}
 
-.app {
+.app{
   display:inline-block;
-  margin:8px;
+  margin:10px;
   color:white;
   font-size:12px;
 }
 
-.icon {
-  width:60px;
-  height:60px;
+/* ICON STYLE */
+.icon{
+  width:65px;
+  height:65px;
   border-radius:50%;
   background-size:cover;
-  box-shadow:0 6px 12px rgba(0,0,0,0.8);
+  background-position:center;
+  box-shadow: inset 0 3px 8px rgba(255,255,255,0.3),
+              0 8px 15px rgba(0,0,0,0.8);
 }
 
-/* ICONS */
-.cam { background:url('https://cdn-icons-png.flaticon.com/512/2920/2920222.png') center/cover; }
-.photos { background:url('https://cdn-icons-png.flaticon.com/512/149/149852.png') center/cover; }
-.browser { background:url('https://cdn-icons-png.flaticon.com/512/888/888879.png') center/cover; }
-.store { background:url('https://cdn-icons-png.flaticon.com/512/731/731985.png') center/cover; }
+/* TOP WIDGET */
+.top{
+  position:absolute;
+  top:10px;
+  width:100%;
+  text-align:center;
+  color:white;
+  font-size:14px;
+}
 
-.screen { display:none; position:absolute; width:100%; height:100%; }
-.active { display:block; }
+/* DOCK */
+.dock{
+  position:absolute;
+  bottom:10px;
+  width:100%;
+  text-align:center;
+}
 
-.exit {
+.dock .icon{
+  width:60px;
+  height:60px;
+}
+
+/* SCREENS */
+.screen{
+  display:none;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:black;
+}
+
+.active{ display:block; }
+
+.exit{
   position:absolute;
   top:10px;
   right:10px;
@@ -58,9 +96,13 @@ body {
   padding:5px;
 }
 
-video, canvas { width:100%; }
+/* CAMERA */
+video, canvas{
+  width:100%;
+}
 
-.gallery img {
+/* PHOTOS */
+.gallery img{
   width:80px;
   margin:5px;
 }
@@ -71,31 +113,104 @@ video, canvas { width:100%; }
 
 <div class="phone">
 
+<div class="top">9:41 AM</div>
+
 <!-- HOME -->
 <div id="home" class="screen active">
+
 <div class="grid" id="apps">
 
+<!-- ROW 1 -->
 <div class="app">
-  <div class="icon cam" onclick="openApp('camera')"></div>
-  Camera
+<div class="icon" style="background:#2ecc71" onclick="openApp('messages')"></div>
+Messages
 </div>
 
 <div class="app">
-  <div class="icon photos" onclick="openApp('photos')"></div>
-  Photos
+<div class="icon" style="background:#7f8c8d" onclick="openApp('camera')"></div>
+Camera
+</div>
+
+<!-- ROW 2 -->
+<div class="app">
+<div class="icon" style="background:#3498db"></div>
+FaceTime
 </div>
 
 <div class="app">
-  <div class="icon browser" onclick="openBrowser()"></div>
-  Browser
+<div class="icon" style="background:#2980b9"></div>
+Stocks
 </div>
 
 <div class="app">
-  <div class="icon store" onclick="openApp('store')"></div>
-  App Store
+<div class="icon" style="background:#f1c40f"></div>
+Maps
+</div>
+
+<!-- ROW 3 -->
+<div class="app">
+<div class="icon" style="background:#e67e22" onclick="openApp('photos')"></div>
+Photos
+</div>
+
+<div class="app">
+<div class="icon" style="background:#1abc9c"></div>
+Weather
+</div>
+
+<div class="app">
+<div class="icon" style="background:#ecf0f1"></div>
+Notes
+</div>
+
+<!-- ROW 4 -->
+<div class="app">
+<div class="icon" style="background:#9b59b6"></div>
+Music
+</div>
+
+<div class="app">
+<div class="icon" style="background:#34495e" onclick="openApp('settings')"></div>
+Settings
+</div>
+
+<div class="app">
+<div class="icon" style="background:#ffffff"></div>
+Clock
+</div>
+
+<div class="app">
+<div class="icon" style="background:#16a085"></div>
+Videos
 </div>
 
 </div>
+
+<!-- DOCK -->
+<div class="dock">
+
+<div class="app">
+<div class="icon" style="background:#2ecc71"></div>
+Phone
+</div>
+
+<div class="app">
+<div class="icon" style="background:#3498db"></div>
+Mail
+</div>
+
+<div class="app">
+<div class="icon" style="background:#2980b9" onclick="openBrowser()"></div>
+Safari
+</div>
+
+<div class="app">
+<div class="icon" style="background:#f39c12"></div>
+Lock
+</div>
+
+</div>
+
 </div>
 
 <!-- CAMERA -->
@@ -112,13 +227,15 @@ video, canvas { width:100%; }
 <div id="gallery" class="gallery"></div>
 </div>
 
-<!-- STORE -->
-<div id="store" class="screen">
+<!-- SETTINGS -->
+<div id="settings" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<button onclick="installFlappy()">Install Flappy Bird</button>
+<h3 style="color:white">Settings</h3>
+<input type="range" min="0.5" max="1.5" step="0.1" value="1"
+oninput="document.body.style.zoom=this.value">
 </div>
 
-<!-- FLAPPY BIRD -->
+<!-- FLAPPY -->
 <div id="flappy" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <canvas id="game" width="300" height="400"></canvas>
@@ -172,99 +289,6 @@ function loadPhotos(){
 /* BROWSER */
 function openBrowser(){
   window.open("https://www.google.com","_blank");
-}
-
-/* INSTALL FLAPPY */
-function installFlappy(){
-  let app=document.createElement("div");
-  app.className="app";
-  app.innerHTML=`
-    <div class="icon" style="background:url('https://cdn-icons-png.flaticon.com/512/616/616494.png') center/cover;"
-    onclick="openApp('flappy'); startGame();"></div>
-    Flappy
-  `;
-  document.getElementById("apps").appendChild(app);
-}
-
-/* ===== FLAPPY BIRD ===== */
-
-let canvasGame = document.getElementById("game");
-let ctx = canvasGame.getContext("2d");
-
-let bird, pipes, score, running;
-
-/* START */
-function startGame(){
-  bird = { x:50, y:150, v:0 };
-  pipes = [];
-  score = 0;
-  running = true;
-  spawnPipe();
-  loop();
-}
-
-/* PIPE */
-function spawnPipe(){
-  let gap = 120;
-  let top = Math.random()*200+20;
-
-  pipes.push({ x:300, top:top, bottom:top+gap });
-
-  if(running) setTimeout(spawnPipe,1500);
-}
-
-/* LOOP */
-function loop(){
-  if(!running) return;
-
-  ctx.clearRect(0,0,300,400);
-
-  bird.v += 0.5;
-  bird.y += bird.v;
-
-  ctx.fillStyle="yellow";
-  ctx.fillRect(bird.x,bird.y,20,20);
-
-  ctx.fillStyle="green";
-
-  pipes.forEach(p=>{
-    p.x -= 2;
-
-    ctx.fillRect(p.x,0,30,p.top);
-    ctx.fillRect(p.x,p.bottom,30,400);
-
-    if(
-      bird.x < p.x+30 &&
-      bird.x+20 > p.x &&
-      (bird.y < p.top || bird.y+20 > p.bottom)
-    ){
-      gameOver();
-    }
-
-    if(p.x === 50) score++;
-  });
-
-  if(bird.y>380 || bird.y<0) gameOver();
-
-  ctx.fillStyle="white";
-  ctx.fillText("Score: "+score,10,20);
-
-  requestAnimationFrame(loop);
-}
-
-/* JUMP */
-document.addEventListener("click",()=>{
-  if(running) bird.v = -8;
-});
-
-/* GAME OVER */
-function gameOver(){
-  running=false;
-  ctx.fillStyle="red";
-  ctx.font="30px Arial";
-  ctx.fillText("Game Over",70,200);
-
-  setTimeout(startGame,1500);
 }
 
 </script>
