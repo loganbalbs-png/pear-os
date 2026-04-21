@@ -20,12 +20,12 @@ body{
   height:600px;
   border-radius:60px;
   background:#0a2a66;
-  position:relative;
   overflow:hidden;
+  position:relative;
   color:white;
 }
 
-/* TOP BUBBLES */
+/* FLOATING BUBBLES */
 .topbar{
   position:absolute;
   top:10px;
@@ -36,10 +36,26 @@ body{
 }
 
 .bubble{
-  background:rgba(0,0,0,0.6);
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:12px;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:radial-gradient(circle,#222,#000);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  text-align:center;
+  animation:float 3s infinite ease-in-out;
+  box-shadow:0 5px 15px rgba(0,0,0,0.8);
+}
+
+.bubble:nth-child(2){animation-delay:0.5s;}
+.bubble:nth-child(3){animation-delay:1s;}
+
+@keyframes float{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+  100%{transform:translateY(0);}
 }
 
 /* SCREENS */
@@ -47,24 +63,38 @@ body{
 .active{display:block;}
 
 /* GRID */
-.grid{text-align:center;margin-top:80px;}
+.grid{text-align:center;margin-top:90px;}
 
 .app{display:inline-block;margin:10px;font-size:11px;}
 
-/* ICON STYLE */
+/* PEAR ICONS */
 .icon{
-  width:65px;height:65px;
+  width:65px;
+  height:65px;
   border-radius:50%;
-  background-size:cover;
-  background-position:center;
-  box-shadow:0 8px 15px rgba(0,0,0,0.9);
+  background:radial-gradient(circle at top,#ffffff55,#000);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  box-shadow:inset 0 3px 8px rgba(255,255,255,0.4),
+             0 10px 15px rgba(0,0,0,0.9);
 }
+
+/* ICON COLORS */
+.green{background:radial-gradient(circle,#2ecc71,#145a32);}
+.blue{background:radial-gradient(circle,#3498db,#154360);}
+.orange{background:radial-gradient(circle,#e67e22,#6e2c00);}
+.purple{background:radial-gradient(circle,#9b59b6,#4a235a);}
+.gray{background:radial-gradient(circle,#bdc3c7,#424949);}
 
 /* EXIT */
 .exit{
   position:absolute;
-  top:10px;right:10px;
-  background:red;padding:5px;
+  top:10px;
+  right:10px;
+  background:red;
+  padding:5px;
 }
 
 /* MARY */
@@ -79,12 +109,6 @@ body{
   display:none;
   animation:float 2s infinite;
 }
-
-@keyframes float{
-  0%{transform:translate(-50%,0);}
-  50%{transform:translate(-50%,-10px);}
-  100%{transform:translate(-50%,0);}
-}
 </style>
 </head>
 
@@ -92,11 +116,11 @@ body{
 
 <div class="phone" id="phone">
 
-<!-- TOP BUBBLES -->
+<!-- FLOATING TOP BUBBLES -->
 <div class="topbar">
-  <div class="bubble">☀️ 23°</div>
+  <div class="bubble">☀️<br>23°</div>
   <div class="bubble" id="time"></div>
-  <div class="bubble" onclick="openApp('settings')">Customize</div>
+  <div class="bubble" onclick="openApp('settings')">⚙️</div>
 </div>
 
 <!-- HOME -->
@@ -104,32 +128,32 @@ body{
 <div class="grid" id="apps">
 
 <div class="app">
-<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2462/2462719.png')" onclick="openApp('messages')"></div>
+<div class="icon green" onclick="openApp('messages')">💬</div>
 Messages
 </div>
 
 <div class="app">
-<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2920/2920349.png')" onclick="openApp('camera')"></div>
+<div class="icon gray" onclick="openApp('camera')">📷</div>
 Camera
 </div>
 
 <div class="app">
-<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/841/841364.png')" onclick="openApp('browser')"></div>
+<div class="icon blue" onclick="openApp('browser')">🌐</div>
 Pear Brows
 </div>
 
 <div class="app">
-<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/149/149071.png')" onclick="openApp('photos')"></div>
+<div class="icon orange" onclick="openApp('photos')">🖼️</div>
 Photos
 </div>
 
 <div class="app">
-<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/1170/1170678.png')" onclick="openApp('store')"></div>
-App Store
+<div class="icon purple" onclick="openApp('store')">🛍️</div>
+Store
 </div>
 
 <div class="app">
-<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png')" onclick="openApp('settings')"></div>
+<div class="icon gray" onclick="openApp('settings')">⚙️</div>
 Settings
 </div>
 
@@ -140,13 +164,8 @@ Settings
 <div id="settings" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 
-<h3>Settings</h3>
+<h3>Customize</h3>
 
-<p>Brightness</p>
-<input type="range" min="0.5" max="1.5" step="0.1"
-oninput="document.body.style.filter='brightness('+this.value+')'">
-
-<h4>Customize</h4>
 <button onclick="phone.style.background='#1a4fff'">Blue</button>
 <button onclick="phone.style.background='#000'">Black</button>
 <button onclick="phone.style.background='#4b0082'">Purple</button>
@@ -178,7 +197,7 @@ oninput="document.body.style.filter='brightness('+this.value+')'">
 <!-- STORE -->
 <div id="store" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<button onclick="installGame()">Install Flappy</button>
+<button onclick="installGame()">Install Game</button>
 </div>
 
 <!-- GAME -->
@@ -195,8 +214,7 @@ oninput="document.body.style.filter='brightness('+this.value+')'">
 
 /* TIME */
 setInterval(()=>{
-  document.getElementById("time").innerText =
-    new Date().toLocaleTimeString();
+  time.innerText=new Date().toLocaleTimeString();
 },1000);
 
 /* NAV */
@@ -246,14 +264,14 @@ function installGame(){
   let app=document.createElement("div");
   app.className="app";
   app.innerHTML=`
-    <div class="icon" style="background:yellow"
-    onclick="openApp('flappy'); startGame();"></div>
-    Flappy
+    <div class="icon orange"
+    onclick="openApp('flappy'); startGame();">🎮</div>
+    Game
   `;
   apps.appendChild(app);
 }
 
-/* GAME */
+/* SIMPLE GAME */
 let ctx=document.getElementById("game").getContext("2d");
 let bird,pipes,run;
 
@@ -272,12 +290,10 @@ function spawn(){
 
 function loop(){
   if(!run)return;
-
   ctx.clearRect(0,0,300,400);
 
   bird.v+=0.5;
   bird.y+=bird.v;
-
   ctx.fillRect(bird.x,bird.y,20,20);
 
   pipes.forEach(p=>{
@@ -296,7 +312,7 @@ function loop(){
 
 document.addEventListener("click",()=>{if(run)bird.v=-8});
 
-/* ===== MARY ===== */
+/* MARY */
 const mary=document.getElementById("mary");
 
 function speak(t){
@@ -304,23 +320,11 @@ function speak(t){
 }
 
 function reply(input){
-
-  if(input.includes("1+1"))
-    return "It's two... how do you not know that?";
-
-  if(input.includes("hi")||input.includes("hello"))
-    return "Hey! I'm Mary, your assistant.";
-
-  if(input.includes("who are you"))
-    return "I'm Mary, built into your Pear Phone.";
-
-  if(input.includes("time"))
-    return "It's " + new Date().toLocaleTimeString();
-
-  return "I'm still learning, but I can help with apps or simple questions.";
+  if(input.includes("1+1")) return "It's two... how do you not know that?";
+  if(input.includes("hi")) return "Hey! I'm Mary.";
+  return "I'm still learning.";
 }
 
-/* VOICE */
 const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
