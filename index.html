@@ -15,51 +15,59 @@ body{
   font-family:sans-serif;
 }
 
+/* PHONE */
 .phone{
   width:320px;
   height:600px;
   border-radius:60px;
-  background: radial-gradient(circle,#1a4fff,#000);
-  padding:10px;
-  position:relative;
+  background: radial-gradient(circle,#0a2a66,#000);
   overflow:hidden;
+  position:relative;
   color:white;
 }
 
+/* SCREENS */
 .screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
 
-.grid{text-align:center;margin-top:80px;}
+/* APP GRID */
+.grid{text-align:center;margin-top:70px;}
+.app{display:inline-block;margin:10px;font-size:12px;}
 
-.app{display:inline-block;margin:8px;font-size:12px;}
-
+/* PEAR ICON STYLE */
 .icon{
-  width:60px;height:60px;border-radius:50%;
-  background-size:cover;background-position:center;
-  box-shadow:0 6px 12px rgba(0,0,0,0.8);
+  width:65px;height:65px;
+  border-radius:50%;
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 8px 16px rgba(0,0,0,0.9);
+  border:2px solid rgba(255,255,255,0.2);
 }
 
+/* EXIT */
 .exit{
-  position:absolute;top:10px;right:10px;
-  background:red;color:white;padding:5px;
+  position:absolute;
+  top:10px;right:10px;
+  background:red;color:white;
+  padding:5px;
 }
 
-/* Mary orb */
+/* MARY */
 #mary{
   position:absolute;
   bottom:20px;
   left:50%;
   transform:translateX(-50%);
-  width:60px;height:60px;
+  width:70px;height:70px;
   border-radius:50%;
-  background:orange;
+  background:radial-gradient(circle,orange,yellow);
   display:none;
   animation:float 2s infinite ease-in-out;
 }
 
 @keyframes float{
   0%{transform:translate(-50%,0);}
-  50%{transform:translate(-50%,-10px);}
+  50%{transform:translate(-50%,-12px);}
   100%{transform:translate(-50%,0);}
 }
 
@@ -76,32 +84,32 @@ body{
 <div class="grid" id="apps">
 
 <div class="app">
-<div class="icon" style="background:#2ecc71" onclick="openApp('messages')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2462/2462719.png')" onclick="openApp('messages')"></div>
 Messages
 </div>
 
 <div class="app">
-<div class="icon" style="background:#7f8c8d" onclick="openApp('camera')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2920/2920349.png')" onclick="openApp('camera')"></div>
 Camera
 </div>
 
 <div class="app">
-<div class="icon" style="background:#3498db" onclick="openApp('browser')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/841/841364.png')" onclick="openApp('browser')"></div>
 Pear Brows
 </div>
 
 <div class="app">
-<div class="icon" style="background:#e67e22" onclick="openApp('photos')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/149/149071.png')" onclick="openApp('photos')"></div>
 Photos
 </div>
 
 <div class="app">
-<div class="icon" style="background:#9b59b6" onclick="openApp('store')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/1170/1170678.png')" onclick="openApp('store')"></div>
 App Store
 </div>
 
 <div class="app">
-<div class="icon" style="background:#34495e" onclick="openApp('settings')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png')" onclick="openApp('settings')"></div>
 Settings
 </div>
 
@@ -112,7 +120,7 @@ Settings
 <div id="camera" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <video id="cam" autoplay></video>
-<button onclick="takePhoto()">📸</button>
+<button onclick="takePhoto()">📸 Take Photo</button>
 <canvas id="canvas"></canvas>
 </div>
 
@@ -126,7 +134,7 @@ Settings
 <div id="browser" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <input id="search" placeholder="Search..." style="width:90%">
-<button onclick="searchWeb()">Go</button>
+<button onclick="searchWeb()">Search</button>
 <iframe id="frame" style="width:100%;height:80%"></iframe>
 </div>
 
@@ -201,11 +209,10 @@ function loadPhotos(){
 
 /* BROWSER */
 function searchWeb(){
-  let q=search.value;
-  frame.src="https://www.google.com/search?q="+q;
+  frame.src="https://www.bing.com/search?q="+search.value;
 }
 
-/* APP STORE */
+/* STORE */
 function installFlappy(){
   let app=document.createElement("div");
   app.className="app";
@@ -217,7 +224,7 @@ function installFlappy(){
   apps.appendChild(app);
 }
 
-/* ===== FLAPPY ===== */
+/* FLAPPY GAME */
 let ctx=document.getElementById("game").getContext("2d");
 let bird,pipes,run;
 
@@ -250,11 +257,8 @@ function loop(){
     ctx.fillRect(p.x,0,30,p.top);
     ctx.fillRect(p.x,p.bottom,30,400);
 
-    if(
-      bird.x<p.x+30 &&
-      bird.x+20>p.x &&
-      (bird.y<p.top||bird.y+20>p.bottom)
-    ){
+    if(bird.x<p.x+30 && bird.x+20>p.x &&
+      (bird.y<p.top||bird.y+20>p.bottom)){
       run=false;
     }
   });
@@ -264,22 +268,44 @@ function loop(){
 
 document.addEventListener("click",()=>{if(run)bird.v=-8});
 
-/* ===== MARY AI ===== */
+/* ===== MARY AI (SMARTER) ===== */
 
-const maryDiv=document.getElementById("mary");
-
-const responses={
-  "hi":"Hey! What's up?",
-  "how are you":"I'm doing great 😄",
-  "what is your name":"I'm Mary!",
-  "open camera":"Opening camera!"
-};
+const mary=document.getElementById("mary");
 
 function speak(text){
   speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }
 
-/* Voice */
+function getResponse(input){
+  input=input.toLowerCase();
+
+  if(input.includes("hello")||input.includes("hi"))
+    return "Hey! I'm Mary, your personal assistant. You can ask me anything.";
+
+  if(input.includes("weather"))
+    return "I can't access real-time weather yet, but I can help you check it online using Pear Browser.";
+
+  if(input.includes("who are you"))
+    return "I'm Mary, your Pear Phone assistant. I can help with apps, questions, and more.";
+
+  if(input.includes("open camera")){
+    openApp("camera");
+    return "Opening the camera now.";
+  }
+
+  if(input.includes("play game")){
+    openApp("flappy");
+    startGame();
+    return "Launching your game. Good luck!";
+  }
+
+  if(input.includes("time"))
+    return "The current time is " + new Date().toLocaleTimeString();
+
+  return "That's interesting. I'm still learning, but I think you can find a great answer using Pear Browser.";
+}
+
+/* VOICE */
 const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
@@ -287,13 +313,10 @@ rec.onresult=e=>{
   let text=e.results[e.results.length-1][0].transcript.toLowerCase();
 
   if(text.includes("hey mary")){
-    maryDiv.style.display="block";
-    speak("Hi!");
+    mary.style.display="block";
+    speak("Hi, how can I help?");
   }else{
-    let reply="I don't know that yet!";
-    for(let key in responses){
-      if(text.includes(key)) reply=responses[key];
-    }
+    let reply=getResponse(text);
     speak(reply);
   }
 };
