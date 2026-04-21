@@ -13,7 +13,6 @@ body {
   font-family:sans-serif;
 }
 
-/* PHONE */
 .phone {
   width:320px;
   height:580px;
@@ -24,10 +23,8 @@ body {
   overflow:hidden;
 }
 
-/* GRID */
 .grid { text-align:center; }
 
-/* APP */
 .app {
   display:inline-block;
   margin:8px;
@@ -35,7 +32,6 @@ body {
   font-size:12px;
 }
 
-/* ICON */
 .icon {
   width:60px;
   height:60px;
@@ -44,19 +40,15 @@ body {
   box-shadow:0 6px 12px rgba(0,0,0,0.8);
 }
 
-/* ICON IMAGES */
-.msg { background:url('https://cdn-icons-png.flaticon.com/512/2462/2462719.png') center/cover; }
+/* ICONS */
 .cam { background:url('https://cdn-icons-png.flaticon.com/512/2920/2920222.png') center/cover; }
 .photos { background:url('https://cdn-icons-png.flaticon.com/512/149/149852.png') center/cover; }
 .browser { background:url('https://cdn-icons-png.flaticon.com/512/888/888879.png') center/cover; }
-.settings { background:url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png') center/cover; }
-.appstore { background:url('https://cdn-icons-png.flaticon.com/512/731/731985.png') center/cover; }
+.store { background:url('https://cdn-icons-png.flaticon.com/512/731/731985.png') center/cover; }
 
-/* SCREENS */
 .screen { display:none; position:absolute; width:100%; height:100%; }
 .active { display:block; }
 
-/* EXIT */
 .exit {
   position:absolute;
   top:10px;
@@ -66,46 +58,11 @@ body {
   padding:5px;
 }
 
-/* CAMERA */
 video, canvas { width:100%; }
 
-/* PHOTOS */
 .gallery img {
   width:80px;
   margin:5px;
-}
-
-/* MARY ORB */
-#orb {
-  position:absolute;
-  bottom:-120px;
-  left:50%;
-  transform:translateX(-50%);
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  background: radial-gradient(circle, orange, red);
-  box-shadow:0 0 30px orange;
-  transition:0.4s;
-}
-
-.activeOrb {
-  bottom:20px;
-  animation:float 2s infinite;
-}
-
-@keyframes float {
-  0% { transform:translateX(-50%) translateY(0); }
-  50% { transform:translateX(-50%) translateY(-10px); }
-  100% { transform:translateX(-50%) translateY(0); }
-}
-
-#maryText {
-  position:absolute;
-  bottom:120px;
-  width:100%;
-  text-align:center;
-  color:white;
 }
 </style>
 </head>
@@ -114,20 +71,29 @@ video, canvas { width:100%; }
 
 <div class="phone">
 
-<div id="maryText">Say "Hey Mary"</div>
-<div id="orb"></div>
-
 <!-- HOME -->
 <div id="home" class="screen active">
 <div class="grid" id="apps">
 
-<div class="app"><div class="icon msg" onclick="openApp('messages')"></div>Messages</div>
-<div class="app"><div class="icon cam" onclick="openApp('camera')"></div>Camera</div>
-<div class="app"><div class="icon photos" onclick="openApp('photos')"></div>Photos</div>
+<div class="app">
+  <div class="icon cam" onclick="openApp('camera')"></div>
+  Camera
+</div>
 
-<div class="app"><div class="icon browser" onclick="openBrowser()"></div>Browser</div>
-<div class="app"><div class="icon settings" onclick="openApp('settings')"></div>Settings</div>
-<div class="app"><div class="icon appstore" onclick="openApp('store')"></div>App Store</div>
+<div class="app">
+  <div class="icon photos" onclick="openApp('photos')"></div>
+  Photos
+</div>
+
+<div class="app">
+  <div class="icon browser" onclick="openBrowser()"></div>
+  Browser
+</div>
+
+<div class="app">
+  <div class="icon store" onclick="openApp('store')"></div>
+  App Store
+</div>
 
 </div>
 </div>
@@ -146,19 +112,13 @@ video, canvas { width:100%; }
 <div id="gallery" class="gallery"></div>
 </div>
 
-<!-- SETTINGS -->
-<div id="settings" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<p>Settings</p>
-</div>
-
-<!-- APP STORE -->
+<!-- STORE -->
 <div id="store" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <button onclick="installFlappy()">Install Flappy Bird</button>
 </div>
 
-<!-- FLAPPY -->
+<!-- FLAPPY BIRD -->
 <div id="flappy" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <canvas id="game" width="300" height="400"></canvas>
@@ -170,116 +130,142 @@ video, canvas { width:100%; }
 
 /* NAV */
 function openApp(app){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-document.getElementById(app).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(app).classList.add('active');
 
-if(app==="camera"){
-navigator.mediaDevices.getUserMedia({video:true})
-.then(stream=>cam.srcObject=stream);
-}
-if(app==="photos") loadPhotos();
+  if(app==="camera"){
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(stream=>cam.srcObject=stream);
+  }
+
+  if(app==="photos") loadPhotos();
 }
 
 function goHome(){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-home.classList.add('active');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  home.classList.add('active');
 }
 
 /* CAMERA */
 function takePhoto(){
-canvas.width=cam.videoWidth;
-canvas.height=cam.videoHeight;
-canvas.getContext("2d").drawImage(cam,0,0);
+  canvas.width=cam.videoWidth;
+  canvas.height=cam.videoHeight;
+  canvas.getContext("2d").drawImage(cam,0,0);
 
-let data=canvas.toDataURL();
-let photos=JSON.parse(localStorage.getItem("photos")||"[]");
-photos.push(data);
-localStorage.setItem("photos",JSON.stringify(photos));
+  let data=canvas.toDataURL();
+  let photos=JSON.parse(localStorage.getItem("photos")||"[]");
+  photos.push(data);
+  localStorage.setItem("photos",JSON.stringify(photos));
 }
 
 /* PHOTOS */
 function loadPhotos(){
-gallery.innerHTML="";
-let photos=JSON.parse(localStorage.getItem("photos")||"[]");
-photos.forEach(p=>{
-let img=document.createElement("img");
-img.src=p;
-gallery.appendChild(img);
-});
+  gallery.innerHTML="";
+  let photos=JSON.parse(localStorage.getItem("photos")||"[]");
+  photos.forEach(p=>{
+    let img=document.createElement("img");
+    img.src=p;
+    gallery.appendChild(img);
+  });
 }
 
 /* BROWSER */
 function openBrowser(){
-window.open("https://www.google.com","_blank");
+  window.open("https://www.google.com","_blank");
 }
 
-/* APP STORE */
+/* INSTALL FLAPPY */
 function installFlappy(){
-let app=document.createElement("div");
-app.className="app";
-app.innerHTML='<div class="icon" style="background:yellow;" onclick="openApp(\'flappy\')"></div>Flappy';
-apps.appendChild(app);
+  let app=document.createElement("div");
+  app.className="app";
+  app.innerHTML=`
+    <div class="icon" style="background:url('https://cdn-icons-png.flaticon.com/512/616/616494.png') center/cover;"
+    onclick="openApp('flappy'); startGame();"></div>
+    Flappy
+  `;
+  document.getElementById("apps").appendChild(app);
 }
 
-/* SIMPLE FLAPPY */
-let ctx = document.getElementById("game").getContext("2d");
-let y=150, v=0;
+/* ===== FLAPPY BIRD ===== */
+
+let canvasGame = document.getElementById("game");
+let ctx = canvasGame.getContext("2d");
+
+let bird, pipes, score, running;
+
+/* START */
+function startGame(){
+  bird = { x:50, y:150, v:0 };
+  pipes = [];
+  score = 0;
+  running = true;
+  spawnPipe();
+  loop();
+}
+
+/* PIPE */
+function spawnPipe(){
+  let gap = 120;
+  let top = Math.random()*200+20;
+
+  pipes.push({ x:300, top:top, bottom:top+gap });
+
+  if(running) setTimeout(spawnPipe,1500);
+}
+
+/* LOOP */
 function loop(){
-ctx.clearRect(0,0,300,400);
-v+=0.5; y+=v;
-ctx.fillRect(50,y,20,20);
-requestAnimationFrame(loop);
-}
-loop();
-document.onclick=()=>v=-8;
+  if(!running) return;
 
-/* ===== MARY SYSTEM ===== */
+  ctx.clearRect(0,0,300,400);
 
-function startMary(){
-let rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
-rec.continuous=true;
-rec.start();
+  bird.v += 0.5;
+  bird.y += bird.v;
 
-rec.onresult=e=>{
-let t=e.results[e.results.length-1][0].transcript.toLowerCase();
-if(t.includes("hey mary")) activateMary();
-};
+  ctx.fillStyle="yellow";
+  ctx.fillRect(bird.x,bird.y,20,20);
 
-rec.onend=()=>startMary();
-}
+  ctx.fillStyle="green";
 
-function activateMary(){
-orb.classList.add("activeOrb");
-maryText.innerText="Listening...";
+  pipes.forEach(p=>{
+    p.x -= 2;
 
-let rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
-rec.start();
+    ctx.fillRect(p.x,0,30,p.top);
+    ctx.fillRect(p.x,p.bottom,30,400);
 
-rec.onresult=e=>{
-respondMary(e.results[0][0].transcript);
-};
-}
+    if(
+      bird.x < p.x+30 &&
+      bird.x+20 > p.x &&
+      (bird.y < p.top || bird.y+20 > p.bottom)
+    ){
+      gameOver();
+    }
 
-function respondMary(input){
-let t=input.toLowerCase();
-let reply="I didn’t get that.";
+    if(p.x === 50) score++;
+  });
 
-if(t.includes("hello")) reply="Hey!";
-else if(t.includes("time")) reply="It’s "+new Date().toLocaleTimeString();
-else if(t.includes("open camera")){ reply="Opening camera"; openApp("camera"); }
-else if(t.includes("open photos")){ reply="Opening photos"; openApp("photos"); }
-else if(t.includes("joke")) reply="Why did the phone cross the road? To get better signal.";
+  if(bird.y>380 || bird.y<0) gameOver();
 
-maryText.innerText=reply;
-speechSynthesis.speak(new SpeechSynthesisUtterance(reply));
+  ctx.fillStyle="white";
+  ctx.fillText("Score: "+score,10,20);
 
-setTimeout(()=>{
-orb.classList.remove("activeOrb");
-maryText.innerText='Say "Hey Mary"';
-},4000);
+  requestAnimationFrame(loop);
 }
 
-startMary();
+/* JUMP */
+document.addEventListener("click",()=>{
+  if(running) bird.v = -8;
+});
+
+/* GAME OVER */
+function gameOver(){
+  running=false;
+  ctx.fillStyle="red";
+  ctx.font="30px Arial";
+  ctx.fillText("Game Over",70,200);
+
+  setTimeout(startGame,1500);
+}
 
 </script>
 
