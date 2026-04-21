@@ -2,8 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
 
+<style>
 body{
   margin:0;
   background:black;
@@ -14,37 +14,32 @@ body{
   font-family:-apple-system;
 }
 
+/* PHONE */
 .phone{
   width:320px;
   height:600px;
   border-radius:60px;
   overflow:hidden;
-  position:relative;
   background:#0b2c6b;
+  position:relative;
   color:white;
 }
 
 /* LOCK SCREEN */
 #lock{
   position:absolute;
-  width:100%;
-  height:100%;
-  background:linear-gradient(#0b2c6b,#051533);
+  width:100%;height:100%;
+  background:linear-gradient(#0b2c6b,#000);
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  z-index:10;
 }
 
-.pass{
-  display:flex;
-  gap:10px;
-  margin-top:20px;
-}
-.dot{
-  width:12px;height:12px;border-radius:50%;background:#555;
-}
-.filled{background:white;}
+.dots{display:flex;gap:10px;margin:15px;}
+.dot{width:12px;height:12px;border-radius:50%;background:#555;}
+.fill{background:white;}
 
 .keypad button{
   width:60px;height:60px;border-radius:50%;
@@ -52,21 +47,21 @@ body{
   background:#111;color:white;font-size:20px;
 }
 
-/* HOME */
+/* SCREENS */
 .screen{
   position:absolute;
   width:100%;height:100%;
   display:none;
-  transition:0.3s;
 }
 .active{display:block;}
 
+/* GRID */
 .grid{
   margin-top:80px;
   text-align:center;
 }
 
-/* ICON STYLE (PEAR STYLE) */
+/* APPS */
 .app{
   display:inline-block;
   margin:12px;
@@ -76,17 +71,15 @@ body{
 .icon{
   width:70px;height:70px;
   border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, #ffffffaa, transparent),
-             linear-gradient(#4da6ff,#0044aa);
-  box-shadow:0 10px 20px rgba(0,0,0,0.7),
-             inset 0 5px 10px rgba(255,255,255,0.4);
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:22px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.7),
+             inset 0 5px 10px rgba(255,255,255,0.4);
 }
 
-/* DIFFERENT ICON COLORS */
+/* COLORS (Pear style) */
 .msg{background:linear-gradient(#6fff7a,#00a63c);}
 .cam{background:linear-gradient(#ddd,#555);}
 .photos{background:linear-gradient(#ff7,#f06);}
@@ -95,11 +88,10 @@ body{
 .settings{background:linear-gradient(#bbb,#333);}
 .store{background:linear-gradient(#8cf,#05a);}
 
-/* APP SCREEN */
+/* EXIT */
 .exit{
   position:absolute;
-  top:10px;
-  right:10px;
+  top:10px;right:10px;
   background:red;
   padding:6px;
 }
@@ -120,19 +112,15 @@ body{
 
 <div class="phone">
 
-<!-- LOCK SCREEN -->
+<!-- LOCK -->
 <div id="lock">
 <h2>Enter Passcode</h2>
 
-<div class="pass" id="dots">
-<div class="dot"></div>
-<div class="dot"></div>
-<div class="dot"></div>
-<div class="dot"></div>
+<div class="dots" id="dots">
+<div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
 
 <div class="keypad">
-<br>
 <button onclick="press(1)">1</button>
 <button onclick="press(2)">2</button>
 <button onclick="press(3)">3</button><br>
@@ -151,40 +139,20 @@ body{
 
 <div class="grid" id="apps">
 
-<div class="app">
-<div class="icon msg" onclick="openApp('messages')">💬</div>Messages
-</div>
-
-<div class="app">
-<div class="icon cam" onclick="openApp('camera')">📷</div>Camera
-</div>
-
-<div class="app">
-<div class="icon photos" onclick="openApp('photos')">🌼</div>Photos
-</div>
-
-<div class="app">
-<div class="icon browser" onclick="openApp('browser')">🌐</div>PearBrows
-</div>
-
-<div class="app">
-<div class="icon game" onclick="openApp('game')">🎮</div>Game
-</div>
-
-<div class="app">
-<div class="icon settings" onclick="openApp('settings')">⚙️</div>Settings
-</div>
-
-<div class="app">
-<div class="icon store" onclick="openApp('store')">🛍</div>AppStore
-</div>
+<div class="app"><div class="icon msg" onclick="openApp('messages')">💬</div>Messages</div>
+<div class="app"><div class="icon cam" onclick="openApp('camera')">📷</div>Camera</div>
+<div class="app"><div class="icon photos" onclick="openApp('photos')">🌼</div>Photos</div>
+<div class="app"><div class="icon browser" onclick="openApp('browser')">🌐</div>Browser</div>
+<div class="app"><div class="icon game" onclick="openApp('game')">🎮</div>Game</div>
+<div class="app"><div class="icon settings" onclick="openApp('settings')">⚙️</div>Settings</div>
+<div class="app"><div class="icon store" onclick="openApp('store')">🛍</div>Store</div>
 
 </div>
 </div>
 
 <!-- CAMERA -->
 <div id="camera" class="screen">
-<div class="exit" onclick="home()">Exit</div>
+<div class="exit" onclick="goHome()">Exit</div>
 <video id="cam" autoplay></video>
 <button onclick="snap()">📸</button>
 <canvas id="canvas"></canvas>
@@ -192,38 +160,39 @@ body{
 
 <!-- PHOTOS -->
 <div id="photos" class="screen">
-<div class="exit" onclick="home()">Exit</div>
+<div class="exit" onclick="goHome()">Exit</div>
 <div id="gallery"></div>
 </div>
 
 <!-- BROWSER -->
 <div id="browser" class="screen">
-<div class="exit" onclick="home()">Exit</div>
-<input id="search"><button onclick="go()">Go</button>
+<div class="exit" onclick="goHome()">Exit</div>
+<input id="search">
+<button onclick="goSearch()">Go</button>
 <iframe id="frame" style="width:100%;height:80%"></iframe>
 </div>
 
 <!-- GAME -->
 <div id="game" class="screen">
-<div class="exit" onclick="home()">Exit</div>
+<div class="exit" onclick="goHome()">Exit</div>
 <canvas id="g" width="300" height="400"></canvas>
 </div>
 
 <!-- SETTINGS -->
 <div id="settings" class="screen">
-<div class="exit" onclick="home()">Exit</div>
-<h3>Settings</h3>
+<div class="exit" onclick="goHome()">Exit</div>
 Brightness:
-<input type="range" min="0.5" max="1.5" step="0.1" onchange="bright(this.value)">
+<input type="range" min="0.5" max="1.5" step="0.1"
+oninput="document.body.style.filter='brightness('+this.value+')'">
 </div>
 
-<!-- APP STORE -->
+<!-- STORE -->
 <div id="store" class="screen">
-<div class="exit" onclick="home()">Exit</div>
+<div class="exit" onclick="goHome()">Exit</div>
 <h3>App Store</h3>
 
-<button onclick="install('Notes','📝')">Install Notes</button>
-<button onclick="install('Clock','⏰')">Install Clock</button>
+<button onclick="installApp('Notes','📝')">Install Notes</button>
+<button onclick="installApp('Clock','⏰')">Install Clock</button>
 
 </div>
 
@@ -232,31 +201,25 @@ Brightness:
 <script>
 
 /* LOCK */
-let code="1234";
-let input="";
+let pass="1234",input="";
 
 function press(n){
   input+=n;
-
-  dots.children[input.length-1].classList.add("filled");
+  dots.children[input.length-1].classList.add("fill");
 
   if(input.length===4){
-    if(input===code){
+    if(input===pass){
       lock.style.display="none";
-      homeScreen();
+      document.getElementById("home").classList.add("active");
     }else{
-      alert("Wrong");
+      alert("Wrong passcode");
       input="";
-      [...dots.children].forEach(d=>d.classList.remove("filled"));
+      [...dots.children].forEach(d=>d.classList.remove("fill"));
     }
   }
 }
 
-/* HOME */
-function homeScreen(){
-  home.classList.add("active");
-}
-
+/* NAV */
 function openApp(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   let app=document.getElementById(id);
@@ -270,9 +233,9 @@ function openApp(id){
   if(id==="photos") loadPhotos();
 }
 
-function home(){
+function goHome(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  home.classList.add('active');
+  document.getElementById("home").classList.add('active');
 }
 
 /* CAMERA */
@@ -282,15 +245,15 @@ function snap(){
   canvas.getContext("2d").drawImage(cam,0,0);
 
   let img=canvas.toDataURL();
-  let arr=JSON.parse(localStorage.getItem("p")||"[]");
+  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
   arr.push(img);
-  localStorage.setItem("p",JSON.stringify(arr));
+  localStorage.setItem("photos",JSON.stringify(arr));
 }
 
 /* PHOTOS */
 function loadPhotos(){
   gallery.innerHTML="";
-  let arr=JSON.parse(localStorage.getItem("p")||"[]");
+  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
   arr.forEach(i=>{
     let img=document.createElement("img");
     img.src=i;
@@ -300,12 +263,13 @@ function loadPhotos(){
 }
 
 /* BROWSER */
-function go(){
+function goSearch(){
   frame.src="https://www.bing.com/search?q="+search.value;
 }
 
 /* GAME */
 let ctx=g.getContext("2d"),y=150,v=0;
+
 function loop(){
   ctx.clearRect(0,0,300,400);
   v+=0.5;y+=v;
@@ -313,20 +277,14 @@ function loop(){
   requestAnimationFrame(loop);
 }
 loop();
-document.onclick=()=>v=-8;
 
-/* SETTINGS */
-function bright(v){
-  document.body.style.filter=`brightness(${v})`;
-}
+document.addEventListener("click",()=>v=-8);
 
-/* APP STORE */
-function install(name,emoji){
+/* STORE */
+function installApp(name,emoji){
   let div=document.createElement("div");
   div.className="app";
-  div.innerHTML=`
-    <div class="icon">${emoji}</div>${name}
-  `;
+  div.innerHTML=`<div class="icon">${emoji}</div>${name}`;
   apps.appendChild(div);
 }
 
