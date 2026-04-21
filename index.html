@@ -19,7 +19,7 @@ body{
   width:320px;
   height:600px;
   border-radius:60px;
-  background:#0a2a66;
+  background:#0b2c6b;
   position:relative;
   overflow:hidden;
   color:white;
@@ -32,7 +32,6 @@ body{
   width:100%;
   display:flex;
   justify-content:space-around;
-  z-index:5;
 }
 
 .bubble{
@@ -40,45 +39,41 @@ body{
   padding:5px 10px;
   border-radius:20px;
   font-size:12px;
-  animation:float 3s infinite;
-}
-
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-6px);}
-  100%{transform:translateY(0);}
 }
 
 /* SCREENS */
 .screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
 
-/* SWIPE PAGES */
-.pages{
-  display:flex;
-  width:200%;
-  transition:0.4s;
-}
-.page{
-  width:100%;
-  flex-shrink:0;
-}
-
 /* GRID */
-.grid{text-align:center;margin-top:80px;}
+.grid{
+  text-align:center;
+  margin-top:80px;
+}
 
-.app{display:inline-block;margin:10px;font-size:11px;}
+.app{
+  display:inline-block;
+  margin:12px;
+  font-size:11px;
+}
 
-/* PEAR ICON STYLE */
+/* REAL PEAR ICON STYLE */
 .icon{
   width:65px;height:65px;
   border-radius:50%;
-  background-size:cover;
-  background-position:center;
+  position:relative;
   box-shadow:
-    inset 0 3px 6px rgba(255,255,255,0.4),
-    inset 0 -4px 8px rgba(0,0,0,0.6),
-    0 10px 20px rgba(0,0,0,0.9);
+    inset 0 4px 8px rgba(255,255,255,0.5),
+    inset 0 -5px 10px rgba(0,0,0,0.7),
+    0 8px 15px rgba(0,0,0,0.9);
+}
+
+/* ICON INNER IMAGE */
+.icon img{
+  width:70%;
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
 }
 
 /* EXIT */
@@ -98,7 +93,6 @@ body{
   border-radius:50%;
   background:radial-gradient(circle,orange,red);
   display:none;
-  animation:float 2s infinite;
 }
 </style>
 </head>
@@ -111,65 +105,67 @@ body{
 <div class="topbar">
   <div class="bubble">☀️ 23°</div>
   <div class="bubble" id="time"></div>
-  <div class="bubble" onclick="openApp('settings')">Customize</div>
+  <div class="bubble" onclick="openApp('settings')">Settings</div>
 </div>
 
 <!-- HOME -->
 <div id="home" class="screen active">
-<div class="pages" id="pages">
+<div class="grid">
 
-<!-- PAGE 1 -->
-<div class="page">
-<div class="grid" id="apps">
-
+<!-- MESSAGES -->
 <div class="app">
-<div class="icon" style="background:linear-gradient(green,lightgreen)" onclick="openApp('messages')"></div>
+<div class="icon" style="background:#2ecc71" onclick="openApp('messages')">
+<img src="https://img.icons8.com/ios-filled/100/ffffff/speech-bubble.png">
+</div>
 Messages
 </div>
 
+<!-- CAMERA -->
 <div class="app">
-<div class="icon" style="background:radial-gradient(gray,black)" onclick="openApp('camera')"></div>
+<div class="icon" style="background:#444" onclick="openApp('camera')">
+<img src="https://img.icons8.com/ios-filled/100/ffffff/camera.png">
+</div>
 Camera
 </div>
 
+<!-- BROWSER -->
 <div class="app">
-<div class="icon" style="background:linear-gradient(orange,yellow)" onclick="openApp('browser')"></div>
+<div class="icon" style="background:#f39c12" onclick="openApp('browser')">
+<img src="https://img.icons8.com/ios-filled/100/ffffff/globe.png">
+</div>
 Pear Brows
 </div>
 
+<!-- PHOTOS -->
 <div class="app">
-<div class="icon" style="background:linear-gradient(#ffcc00,#ff6600)" onclick="openApp('photos')"></div>
+<div class="icon" style="background:#ffcc00" onclick="openApp('photos')">
+<img src="https://img.icons8.com/ios-filled/100/ffffff/picture.png">
+</div>
 Photos
 </div>
 
+<!-- APP STORE -->
 <div class="app">
-<div class="icon" style="background:linear-gradient(#0ff,#08f)" onclick="openApp('store')"></div>
+<div class="icon" style="background:#3498db" onclick="openApp('store')">
+<img src="https://img.icons8.com/ios-filled/100/ffffff/shopping-bag.png">
+</div>
 App Store
 </div>
 
+<!-- SETTINGS -->
 <div class="app">
-<div class="icon" style="background:linear-gradient(gray,black)" onclick="openApp('settings')"></div>
+<div class="icon" style="background:#7f8c8d" onclick="openApp('settings')">
+<img src="https://img.icons8.com/ios-filled/100/ffffff/settings.png">
+</div>
 Settings
 </div>
 
+<!-- SLAP -->
 <div class="app">
-<div class="icon" style="background:linear-gradient(#ff6600,#ff0000)" onclick="openApp('slap')"></div>
+<div class="icon" style="background:#e74c3c" onclick="openApp('slap')">
+<img src="https://img.icons8.com/ios-filled/100/ffffff/tv.png">
+</div>
 TheSlap
-</div>
-
-</div>
-</div>
-
-<!-- PAGE 2 -->
-<div class="page">
-<div class="grid">
-
-<div class="app">
-<div class="icon" style="background:yellow" onclick="openApp('flappy');startGame();"></div>
-Flappy
-</div>
-
-</div>
 </div>
 
 </div>
@@ -179,9 +175,12 @@ Flappy
 <div id="slap" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 
-<iframe src="https://www.theslap.com"
-style="width:100%;height:90%;border:none;background:#0b2c6b">
-</iframe>
+<div style="padding:10px">
+<h2 style="color:orange">TheSlap</h2>
+<p>Welcome to TheSlap!</p>
+<p>Watch videos, see posts, and explore.</p>
+<button onclick="alert('Video playing...')">▶ Play Video</button>
+</div>
 
 </div>
 
@@ -190,7 +189,6 @@ style="width:100%;height:90%;border:none;background:#0b2c6b">
 <div class="exit" onclick="goHome()">Exit</div>
 
 <h3>Settings</h3>
-
 <p>Brightness</p>
 <input type="range" min="0.5" max="1.5" step="0.1"
 oninput="document.body.style.filter='brightness('+this.value+')'">
@@ -251,22 +249,14 @@ function openApp(id){
     navigator.mediaDevices.getUserMedia({video:true})
     .then(stream=>cam.srcObject=stream);
   }
+
+  if(id==="photos") loadPhotos();
 }
 
-/* HOME */
 function goHome(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   home.classList.add('active');
 }
-
-/* SWIPE */
-let startX=0;
-home.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-home.addEventListener("touchend",e=>{
-  let diff=e.changedTouches[0].clientX-startX;
-  if(diff<-50) pages.style.transform="translateX(-100%)";
-  if(diff>50) pages.style.transform="translateX(0)";
-});
 
 /* CAMERA */
 function takePhoto(){
@@ -291,6 +281,12 @@ function loadPhotos(){
   });
 }
 
+/* STORE */
+function installGame(){
+  openApp('flappy');
+  startGame();
+}
+
 /* GAME */
 let ctx=game.getContext("2d");
 let bird,pipes,run;
@@ -312,10 +308,8 @@ function loop(){
   if(!run)return;
 
   ctx.clearRect(0,0,300,400);
-
   bird.v+=0.5;
   bird.y+=bird.v;
-
   ctx.fillRect(bird.x,bird.y,20,20);
 
   pipes.forEach(p=>{
@@ -334,7 +328,7 @@ function loop(){
 
 document.addEventListener("click",()=>{if(run)bird.v=-8});
 
-/* ===== MARY SMART ===== */
+/* MARY */
 const mary=document.getElementById("mary");
 
 function speak(t){
@@ -342,26 +336,11 @@ function speak(t){
 }
 
 function reply(input){
-
-  if(input.includes("1+1"))
-    return "It's two... seriously?";
-
-  if(input.includes("time"))
-    return "Look at the clock... oh wait fine, it's " + new Date().toLocaleTimeString();
-
-  if(input.includes("hello")||input.includes("hi"))
-    return "Hey! What do you want?";
-
-  if(input.includes("weather"))
-    return "It's nice... go outside for once.";
-
-  if(input.includes("who are you"))
-    return "I'm Mary. Obviously.";
-
-  return "Hmm... I actually understood that. Try something harder.";
+  if(input.includes("1+1")) return "It's two...";
+  if(input.includes("hi")) return "Hey.";
+  return "Try asking something better.";
 }
 
-/* VOICE */
 const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
