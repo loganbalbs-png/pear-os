@@ -2,8 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
+
 body{
   margin:0;
   background:black;
@@ -11,260 +11,324 @@ body{
   justify-content:center;
   align-items:center;
   height:100vh;
-  font-family:sans-serif;
+  font-family:-apple-system;
 }
 
 .phone{
   width:320px;
   height:600px;
   border-radius:60px;
-  background:#0a2a66;
   overflow:hidden;
   position:relative;
+  background:#0b2c6b;
   color:white;
 }
 
-/* TRIANGLE BUBBLES */
-.top{
+/* LOCK SCREEN */
+#lock{
   position:absolute;
-  top:10px;
   width:100%;
+  height:100%;
+  background:linear-gradient(#0b2c6b,#051533);
   display:flex;
+  flex-direction:column;
   justify-content:center;
-}
-
-.triangle{
-  position:relative;
-  width:200px;
-  height:80px;
-}
-
-.bubble{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:radial-gradient(circle,#222,#000);
-  position:absolute;
-  display:flex;
   align-items:center;
-  justify-content:center;
-  font-size:11px;
-  animation:float 3s infinite;
 }
 
-.b1{left:0; top:30px;}
-.b2{right:0; top:30px;}
-.b3{left:75px; top:0;}
+.pass{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+.dot{
+  width:12px;height:12px;border-radius:50%;background:#555;
+}
+.filled{background:white;}
 
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-  100%{transform:translateY(0);}
+.keypad button{
+  width:60px;height:60px;border-radius:50%;
+  margin:5px;
+  background:#111;color:white;font-size:20px;
 }
 
-/* SCREENS */
-.screen{display:none;position:absolute;width:100%;height:100%;}
+/* HOME */
+.screen{
+  position:absolute;
+  width:100%;height:100%;
+  display:none;
+  transition:0.3s;
+}
 .active{display:block;}
 
 .grid{
-  margin-top:100px;
+  margin-top:80px;
   text-align:center;
 }
 
+/* ICON STYLE (PEAR STYLE) */
 .app{
   display:inline-block;
   margin:12px;
   font-size:11px;
 }
 
-/* ICONS (MORE PEAR STYLE) */
 .icon{
-  width:65px;
-  height:65px;
+  width:70px;height:70px;
   border-radius:50%;
-  background-size:cover;
-  background-position:center;
-  box-shadow:0 8px 15px rgba(0,0,0,0.8),
-             inset 0 3px 6px rgba(255,255,255,0.4);
+  background:radial-gradient(circle at 30% 30%, #ffffffaa, transparent),
+             linear-gradient(#4da6ff,#0044aa);
+  box-shadow:0 10px 20px rgba(0,0,0,0.7),
+             inset 0 5px 10px rgba(255,255,255,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
 }
 
-/* ICON IMAGES */
-.msg{background-image:url('https://img.icons8.com/fluency/96/chat.png');}
-.cam{background-image:url('https://img.icons8.com/fluency/96/camera.png');}
-.music{background-image:url('https://img.icons8.com/fluency/96/musical-notes.png');}
-.photos{background-image:url('https://img.icons8.com/fluency/96/picture.png');}
-.browser{background-image:url('https://img.icons8.com/fluency/96/internet.png');}
-.settings{background-image:url('https://img.icons8.com/fluency/96/settings.png');}
+/* DIFFERENT ICON COLORS */
+.msg{background:linear-gradient(#6fff7a,#00a63c);}
+.cam{background:linear-gradient(#ddd,#555);}
+.photos{background:linear-gradient(#ff7,#f06);}
+.browser{background:linear-gradient(#6cf,#06c);}
+.game{background:linear-gradient(#ff9,#f60);}
+.settings{background:linear-gradient(#bbb,#333);}
+.store{background:linear-gradient(#8cf,#05a);}
 
-/* EXIT */
+/* APP SCREEN */
 .exit{
   position:absolute;
   top:10px;
   right:10px;
   background:red;
   padding:6px;
-  border-radius:8px;
 }
 
-/* MARY */
-#mary{
-  position:absolute;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  width:70px;height:70px;
-  border-radius:50%;
-  background:radial-gradient(circle,orange,yellow);
-  display:none;
-  animation:float 2s infinite;
+/* ANIMATION */
+.open{
+  animation:openApp 0.25s ease;
 }
+@keyframes openApp{
+  from{transform:scale(0.8);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="phone" id="phone">
+<div class="phone">
 
-<!-- TRIANGLE BUBBLES -->
-<div class="top">
-  <div class="triangle">
-    <div class="bubble b1">☀️ 23°</div>
-    <div class="bubble b2" id="time"></div>
-    <div class="bubble b3" onclick="openApp('settings')">⚙️</div>
-  </div>
+<!-- LOCK SCREEN -->
+<div id="lock">
+<h2>Enter Passcode</h2>
+
+<div class="pass" id="dots">
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+</div>
+
+<div class="keypad">
+<br>
+<button onclick="press(1)">1</button>
+<button onclick="press(2)">2</button>
+<button onclick="press(3)">3</button><br>
+<button onclick="press(4)">4</button>
+<button onclick="press(5)">5</button>
+<button onclick="press(6)">6</button><br>
+<button onclick="press(7)">7</button>
+<button onclick="press(8)">8</button>
+<button onclick="press(9)">9</button><br>
+<button onclick="press(0)">0</button>
+</div>
 </div>
 
 <!-- HOME -->
-<div id="home" class="screen active">
-<div class="grid">
+<div id="home" class="screen">
+
+<div class="grid" id="apps">
 
 <div class="app">
-<div class="icon msg" onclick="openApp('messages')"></div>
-Messages
-</div>
-
-<div class="app">
-<div class="icon cam" onclick="openApp('camera')"></div>
-Camera
+<div class="icon msg" onclick="openApp('messages')">💬</div>Messages
 </div>
 
 <div class="app">
-<div class="icon music" onclick="openApp('music')"></div>
-PearTunes
+<div class="icon cam" onclick="openApp('camera')">📷</div>Camera
 </div>
 
 <div class="app">
-<div class="icon photos" onclick="openApp('photos')"></div>
-Photos
+<div class="icon photos" onclick="openApp('photos')">🌼</div>Photos
 </div>
 
 <div class="app">
-<div class="icon browser" onclick="openApp('browser')"></div>
-Pear Brows
+<div class="icon browser" onclick="openApp('browser')">🌐</div>PearBrows
 </div>
 
 <div class="app">
-<div class="icon settings" onclick="openApp('settings')"></div>
-Settings
+<div class="icon game" onclick="openApp('game')">🎮</div>Game
+</div>
+
+<div class="app">
+<div class="icon settings" onclick="openApp('settings')">⚙️</div>Settings
+</div>
+
+<div class="app">
+<div class="icon store" onclick="openApp('store')">🛍</div>AppStore
 </div>
 
 </div>
+</div>
+
+<!-- CAMERA -->
+<div id="camera" class="screen">
+<div class="exit" onclick="home()">Exit</div>
+<video id="cam" autoplay></video>
+<button onclick="snap()">📸</button>
+<canvas id="canvas"></canvas>
+</div>
+
+<!-- PHOTOS -->
+<div id="photos" class="screen">
+<div class="exit" onclick="home()">Exit</div>
+<div id="gallery"></div>
+</div>
+
+<!-- BROWSER -->
+<div id="browser" class="screen">
+<div class="exit" onclick="home()">Exit</div>
+<input id="search"><button onclick="go()">Go</button>
+<iframe id="frame" style="width:100%;height:80%"></iframe>
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen">
+<div class="exit" onclick="home()">Exit</div>
+<canvas id="g" width="300" height="400"></canvas>
 </div>
 
 <!-- SETTINGS -->
 <div id="settings" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
+<div class="exit" onclick="home()">Exit</div>
 <h3>Settings</h3>
+Brightness:
+<input type="range" min="0.5" max="1.5" step="0.1" onchange="bright(this.value)">
 </div>
 
-<div id="mary"></div>
+<!-- APP STORE -->
+<div id="store" class="screen">
+<div class="exit" onclick="home()">Exit</div>
+<h3>App Store</h3>
+
+<button onclick="install('Notes','📝')">Install Notes</button>
+<button onclick="install('Clock','⏰')">Install Clock</button>
+
+</div>
 
 </div>
 
 <script>
 
-/* TIME */
-setInterval(()=>{
-  time.innerText=new Date().toLocaleTimeString();
-},1000);
+/* LOCK */
+let code="1234";
+let input="";
 
-/* NAV */
-function openApp(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function press(n){
+  input+=n;
+
+  dots.children[input.length-1].classList.add("filled");
+
+  if(input.length===4){
+    if(input===code){
+      lock.style.display="none";
+      homeScreen();
+    }else{
+      alert("Wrong");
+      input="";
+      [...dots.children].forEach(d=>d.classList.remove("filled"));
+    }
+  }
 }
 
-function goHome(){
+/* HOME */
+function homeScreen(){
+  home.classList.add("active");
+}
+
+function openApp(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  let app=document.getElementById(id);
+  app.classList.add('active','open');
+
+  if(id==="camera"){
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(s=>cam.srcObject=s);
+  }
+
+  if(id==="photos") loadPhotos();
+}
+
+function home(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   home.classList.add('active');
 }
 
-/* 🎤 MARY (SASSY + SMARTER) */
+/* CAMERA */
+function snap(){
+  canvas.width=cam.videoWidth;
+  canvas.height=cam.videoHeight;
+  canvas.getContext("2d").drawImage(cam,0,0);
 
-const mary=document.getElementById("mary");
-
-function speak(text){
-  speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+  let img=canvas.toDataURL();
+  let arr=JSON.parse(localStorage.getItem("p")||"[]");
+  arr.push(img);
+  localStorage.setItem("p",JSON.stringify(arr));
 }
 
-/* FAKE CHATGPT-LIKE LOGIC */
-function smartReply(input){
-
-  if(input.includes("time")){
-    return "I don't know, why don’t you stick your head out a window or something?";
-  }
-
-  if(input.includes("1+1")){
-    return "It's two... how do you not know that?";
-  }
-
-  if(input.includes("hi") || input.includes("hello")){
-    return "Oh great, you're talking to me again. Hi.";
-  }
-
-  if(input.includes("who are you")){
-    return "I'm Mary. Basically smarter than you, but nicer about it.";
-  }
-
-  if(input.includes("go home")){
-    goHome();
-    return "Relax, I'm taking you home.";
-  }
-
-  if(input.includes("open")){
-    if(input.includes("camera")) openApp("camera");
-    if(input.includes("settings")) openApp("settings");
-    return "Done. Try to keep up.";
-  }
-
-  /* fallback (chatgpt-like feel) */
-  const responses = [
-    "That's... interesting. Not in a good way.",
-    "I mean, I could answer that, but do I want to?",
-    "You're really testing me today.",
-    "Let me think... nope, still questionable.",
-    "I guess that makes sense... kinda."
-  ];
-
-  return responses[Math.floor(Math.random()*responses.length)];
+/* PHOTOS */
+function loadPhotos(){
+  gallery.innerHTML="";
+  let arr=JSON.parse(localStorage.getItem("p")||"[]");
+  arr.forEach(i=>{
+    let img=document.createElement("img");
+    img.src=i;
+    img.style.width="80px";
+    gallery.appendChild(img);
+  });
 }
 
-/* VOICE */
-const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
-rec.continuous=true;
+/* BROWSER */
+function go(){
+  frame.src="https://www.bing.com/search?q="+search.value;
+}
 
-rec.onresult=e=>{
-  let text=e.results[e.results.length-1][0].transcript.toLowerCase();
+/* GAME */
+let ctx=g.getContext("2d"),y=150,v=0;
+function loop(){
+  ctx.clearRect(0,0,300,400);
+  v+=0.5;y+=v;
+  ctx.fillRect(50,y,20,20);
+  requestAnimationFrame(loop);
+}
+loop();
+document.onclick=()=>v=-8;
 
-  if(text.includes("hey mary")){
-    mary.style.display="block";
-    speak("What now?");
-  }else{
-    speak(smartReply(text));
-  }
-};
+/* SETTINGS */
+function bright(v){
+  document.body.style.filter=`brightness(${v})`;
+}
 
-rec.start();
+/* APP STORE */
+function install(name,emoji){
+  let div=document.createElement("div");
+  div.className="app";
+  div.innerHTML=`
+    <div class="icon">${emoji}</div>${name}
+  `;
+  apps.appendChild(div);
+}
 
 </script>
 
