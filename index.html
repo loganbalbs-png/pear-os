@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pear Phone</title>
+<title>Pear Phone OS</title>
 
 <style>
 body{
@@ -15,97 +15,55 @@ body{
   font-family:sans-serif;
 }
 
-/* PHONE BODY */
 .phone{
   width:320px;
   height:600px;
   border-radius:60px;
-  background: radial-gradient(circle at top,#2c3e50,#000);
-  padding:15px;
-  box-shadow:0 0 40px rgba(0,0,0,0.9);
+  background: radial-gradient(circle,#1a4fff,#000);
+  padding:10px;
   position:relative;
   overflow:hidden;
-}
-
-/* HOME GRID */
-.grid{
-  text-align:center;
-  margin-top:80px;
-}
-
-.app{
-  display:inline-block;
-  margin:10px;
   color:white;
-  font-size:12px;
 }
 
-/* ICON STYLE */
+.screen{display:none;position:absolute;width:100%;height:100%;}
+.active{display:block;}
+
+.grid{text-align:center;margin-top:80px;}
+
+.app{display:inline-block;margin:8px;font-size:12px;}
+
 .icon{
-  width:65px;
-  height:65px;
-  border-radius:50%;
-  background-size:cover;
-  background-position:center;
-  box-shadow: inset 0 3px 8px rgba(255,255,255,0.3),
-              0 8px 15px rgba(0,0,0,0.8);
+  width:60px;height:60px;border-radius:50%;
+  background-size:cover;background-position:center;
+  box-shadow:0 6px 12px rgba(0,0,0,0.8);
 }
-
-/* TOP WIDGET */
-.top{
-  position:absolute;
-  top:10px;
-  width:100%;
-  text-align:center;
-  color:white;
-  font-size:14px;
-}
-
-/* DOCK */
-.dock{
-  position:absolute;
-  bottom:10px;
-  width:100%;
-  text-align:center;
-}
-
-.dock .icon{
-  width:60px;
-  height:60px;
-}
-
-/* SCREENS */
-.screen{
-  display:none;
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:black;
-}
-
-.active{ display:block; }
 
 .exit{
+  position:absolute;top:10px;right:10px;
+  background:red;color:white;padding:5px;
+}
+
+/* Mary orb */
+#mary{
   position:absolute;
-  top:10px;
-  right:10px;
-  background:red;
-  color:white;
-  padding:5px;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:60px;height:60px;
+  border-radius:50%;
+  background:orange;
+  display:none;
+  animation:float 2s infinite ease-in-out;
 }
 
-/* CAMERA */
-video, canvas{
-  width:100%;
+@keyframes float{
+  0%{transform:translate(-50%,0);}
+  50%{transform:translate(-50%,-10px);}
+  100%{transform:translate(-50%,0);}
 }
 
-/* PHOTOS */
-.gallery img{
-  width:80px;
-  margin:5px;
-}
+.gallery img{width:80px;margin:5px;}
 </style>
 </head>
 
@@ -113,14 +71,10 @@ video, canvas{
 
 <div class="phone">
 
-<div class="top">9:41 AM</div>
-
 <!-- HOME -->
 <div id="home" class="screen active">
-
 <div class="grid" id="apps">
 
-<!-- ROW 1 -->
 <div class="app">
 <div class="icon" style="background:#2ecc71" onclick="openApp('messages')"></div>
 Messages
@@ -131,42 +85,19 @@ Messages
 Camera
 </div>
 
-<!-- ROW 2 -->
 <div class="app">
-<div class="icon" style="background:#3498db"></div>
-FaceTime
+<div class="icon" style="background:#3498db" onclick="openApp('browser')"></div>
+Pear Brows
 </div>
 
-<div class="app">
-<div class="icon" style="background:#2980b9"></div>
-Stocks
-</div>
-
-<div class="app">
-<div class="icon" style="background:#f1c40f"></div>
-Maps
-</div>
-
-<!-- ROW 3 -->
 <div class="app">
 <div class="icon" style="background:#e67e22" onclick="openApp('photos')"></div>
 Photos
 </div>
 
 <div class="app">
-<div class="icon" style="background:#1abc9c"></div>
-Weather
-</div>
-
-<div class="app">
-<div class="icon" style="background:#ecf0f1"></div>
-Notes
-</div>
-
-<!-- ROW 4 -->
-<div class="app">
-<div class="icon" style="background:#9b59b6"></div>
-Music
+<div class="icon" style="background:#9b59b6" onclick="openApp('store')"></div>
+App Store
 </div>
 
 <div class="app">
@@ -174,43 +105,7 @@ Music
 Settings
 </div>
 
-<div class="app">
-<div class="icon" style="background:#ffffff"></div>
-Clock
 </div>
-
-<div class="app">
-<div class="icon" style="background:#16a085"></div>
-Videos
-</div>
-
-</div>
-
-<!-- DOCK -->
-<div class="dock">
-
-<div class="app">
-<div class="icon" style="background:#2ecc71"></div>
-Phone
-</div>
-
-<div class="app">
-<div class="icon" style="background:#3498db"></div>
-Mail
-</div>
-
-<div class="app">
-<div class="icon" style="background:#2980b9" onclick="openBrowser()"></div>
-Safari
-</div>
-
-<div class="app">
-<div class="icon" style="background:#f39c12"></div>
-Lock
-</div>
-
-</div>
-
 </div>
 
 <!-- CAMERA -->
@@ -224,15 +119,31 @@ Lock
 <!-- PHOTOS -->
 <div id="photos" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<div id="gallery" class="gallery"></div>
+<div id="gallery"></div>
+</div>
+
+<!-- BROWSER -->
+<div id="browser" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<input id="search" placeholder="Search..." style="width:90%">
+<button onclick="searchWeb()">Go</button>
+<iframe id="frame" style="width:100%;height:80%"></iframe>
+</div>
+
+<!-- STORE -->
+<div id="store" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<h3>App Store</h3>
+<button onclick="installFlappy()">Install Flappy Bird</button>
 </div>
 
 <!-- SETTINGS -->
 <div id="settings" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<h3 style="color:white">Settings</h3>
-<input type="range" min="0.5" max="1.5" step="0.1" value="1"
-oninput="document.body.style.zoom=this.value">
+<h3>Settings</h3>
+Brightness:
+<input type="range" min="0.5" max="1.5" step="0.1"
+oninput="document.body.style.filter='brightness('+this.value+')'">
 </div>
 
 <!-- FLAPPY -->
@@ -241,21 +152,23 @@ oninput="document.body.style.zoom=this.value">
 <canvas id="game" width="300" height="400"></canvas>
 </div>
 
+<div id="mary"></div>
+
 </div>
 
 <script>
 
 /* NAV */
-function openApp(app){
+function openApp(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(app).classList.add('active');
+  document.getElementById(id).classList.add('active');
 
-  if(app==="camera"){
+  if(id==="camera"){
     navigator.mediaDevices.getUserMedia({video:true})
     .then(stream=>cam.srcObject=stream);
   }
 
-  if(app==="photos") loadPhotos();
+  if(id==="photos") loadPhotos();
 }
 
 function goHome(){
@@ -270,26 +183,122 @@ function takePhoto(){
   canvas.getContext("2d").drawImage(cam,0,0);
 
   let data=canvas.toDataURL();
-  let photos=JSON.parse(localStorage.getItem("photos")||"[]");
-  photos.push(data);
-  localStorage.setItem("photos",JSON.stringify(photos));
+  let p=JSON.parse(localStorage.getItem("photos")||"[]");
+  p.push(data);
+  localStorage.setItem("photos",JSON.stringify(p));
 }
 
 /* PHOTOS */
 function loadPhotos(){
   gallery.innerHTML="";
-  let photos=JSON.parse(localStorage.getItem("photos")||"[]");
-  photos.forEach(p=>{
-    let img=document.createElement("img");
-    img.src=p;
-    gallery.appendChild(img);
+  let p=JSON.parse(localStorage.getItem("photos")||"[]");
+  p.forEach(img=>{
+    let i=document.createElement("img");
+    i.src=img;
+    gallery.appendChild(i);
   });
 }
 
 /* BROWSER */
-function openBrowser(){
-  window.open("https://www.google.com","_blank");
+function searchWeb(){
+  let q=search.value;
+  frame.src="https://www.google.com/search?q="+q;
 }
+
+/* APP STORE */
+function installFlappy(){
+  let app=document.createElement("div");
+  app.className="app";
+  app.innerHTML=`
+    <div class="icon" style="background:yellow"
+    onclick="openApp('flappy'); startGame();"></div>
+    Flappy
+  `;
+  apps.appendChild(app);
+}
+
+/* ===== FLAPPY ===== */
+let ctx=document.getElementById("game").getContext("2d");
+let bird,pipes,run;
+
+function startGame(){
+  bird={x:50,y:150,v:0};
+  pipes=[];
+  run=true;
+  spawn(); loop();
+}
+
+function spawn(){
+  let gap=120;
+  let top=Math.random()*200+20;
+  pipes.push({x:300,top,bottom:top+gap});
+  if(run)setTimeout(spawn,1500);
+}
+
+function loop(){
+  if(!run)return;
+  ctx.clearRect(0,0,300,400);
+
+  bird.v+=0.5;
+  bird.y+=bird.v;
+
+  ctx.fillStyle="yellow";
+  ctx.fillRect(bird.x,bird.y,20,20);
+
+  pipes.forEach(p=>{
+    p.x-=2;
+    ctx.fillRect(p.x,0,30,p.top);
+    ctx.fillRect(p.x,p.bottom,30,400);
+
+    if(
+      bird.x<p.x+30 &&
+      bird.x+20>p.x &&
+      (bird.y<p.top||bird.y+20>p.bottom)
+    ){
+      run=false;
+    }
+  });
+
+  requestAnimationFrame(loop);
+}
+
+document.addEventListener("click",()=>{if(run)bird.v=-8});
+
+/* ===== MARY AI ===== */
+
+const maryDiv=document.getElementById("mary");
+
+const responses={
+  "hi":"Hey! What's up?",
+  "how are you":"I'm doing great 😄",
+  "what is your name":"I'm Mary!",
+  "open camera":"Opening camera!"
+};
+
+function speak(text){
+  speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+}
+
+/* Voice */
+const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
+rec.continuous=true;
+
+rec.onresult=e=>{
+  let text=e.results[e.results.length-1][0].transcript.toLowerCase();
+
+  if(text.includes("hey mary")){
+    maryDiv.style.display="block";
+    speak("Hi!");
+  }else{
+    let reply="I don't know that yet!";
+    for(let key in responses){
+      if(text.includes(key)) reply=responses[key];
+    }
+    speak(reply);
+  }
+};
+
+rec.start();
 
 </script>
 
