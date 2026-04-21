@@ -14,18 +14,17 @@ body{
   font-family:sans-serif;
 }
 
-/* PHONE */
 .phone{
   width:320px;
   height:600px;
   border-radius:60px;
   background:#0a2a66;
-  position:relative;
   overflow:hidden;
+  position:relative;
   color:white;
 }
 
-/* 🔺 TRIANGLE BUBBLES */
+/* TRIANGLE BUBBLES */
 .top{
   position:absolute;
   top:10px;
@@ -53,7 +52,6 @@ body{
   animation:float 3s infinite;
 }
 
-/* triangle positions */
 .b1{left:0; top:30px;}
 .b2{right:0; top:30px;}
 .b3{left:75px; top:0;}
@@ -68,20 +66,18 @@ body{
 .screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
 
-/* GRID */
 .grid{
   margin-top:100px;
   text-align:center;
 }
 
-/* APP */
 .app{
   display:inline-block;
   margin:12px;
   font-size:11px;
 }
 
-/* REALISTIC ICONS */
+/* ICONS (MORE PEAR STYLE) */
 .icon{
   width:65px;
   height:65px;
@@ -93,12 +89,12 @@ body{
 }
 
 /* ICON IMAGES */
-.msg{background-image:url('https://cdn-icons-png.flaticon.com/512/2462/2462719.png');}
-.cam{background-image:url('https://cdn-icons-png.flaticon.com/512/685/685655.png');}
-.music{background-image:url('https://cdn-icons-png.flaticon.com/512/727/727269.png');}
-.photos{background-image:url('https://cdn-icons-png.flaticon.com/512/1829/1829586.png');}
-.browser{background-image:url('https://cdn-icons-png.flaticon.com/512/841/841364.png');}
-.settings{background-image:url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png');}
+.msg{background-image:url('https://img.icons8.com/fluency/96/chat.png');}
+.cam{background-image:url('https://img.icons8.com/fluency/96/camera.png');}
+.music{background-image:url('https://img.icons8.com/fluency/96/musical-notes.png');}
+.photos{background-image:url('https://img.icons8.com/fluency/96/picture.png');}
+.browser{background-image:url('https://img.icons8.com/fluency/96/internet.png');}
+.settings{background-image:url('https://img.icons8.com/fluency/96/settings.png');}
 
 /* EXIT */
 .exit{
@@ -129,7 +125,7 @@ body{
 
 <div class="phone" id="phone">
 
-<!-- 🔺 TRIANGLE BUBBLES -->
+<!-- TRIANGLE BUBBLES -->
 <div class="top">
   <div class="triangle">
     <div class="bubble b1">☀️ 23°</div>
@@ -179,41 +175,6 @@ Settings
 <div id="settings" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <h3>Settings</h3>
-
-<button onclick="phone.style.background='#000'">Black</button>
-<button onclick="phone.style.background='#1a4fff'">Blue</button>
-
-</div>
-
-<!-- BROWSER -->
-<div id="browser" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-
-<input id="search" placeholder="Search...">
-<button onclick="frame.src='https://www.bing.com/search?q='+search.value">Go</button>
-<iframe id="frame" style="width:100%;height:80%"></iframe>
-
-</div>
-
-<!-- CAMERA -->
-<div id="camera" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<video id="cam" autoplay></video>
-<button onclick="takePhoto()">📸</button>
-<canvas id="canvas"></canvas>
-</div>
-
-<!-- PHOTOS -->
-<div id="photos" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<div id="gallery"></div>
-</div>
-
-<!-- MUSIC -->
-<div id="music" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<h3>PearTunes</h3>
-<p>Music player coming soon 🎵</p>
 </div>
 
 <div id="mary"></div>
@@ -231,13 +192,6 @@ setInterval(()=>{
 function openApp(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-
-  if(id==="camera"){
-    navigator.mediaDevices.getUserMedia({video:true})
-    .then(stream=>cam.srcObject=stream);
-  }
-
-  if(id==="photos") loadPhotos();
 }
 
 function goHome(){
@@ -245,44 +199,57 @@ function goHome(){
   home.classList.add('active');
 }
 
-/* CAMERA */
-function takePhoto(){
-  canvas.width=cam.videoWidth;
-  canvas.height=cam.videoHeight;
-  canvas.getContext("2d").drawImage(cam,0,0);
+/* 🎤 MARY (SASSY + SMARTER) */
 
-  let img=canvas.toDataURL();
-  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
-  arr.push(img);
-  localStorage.setItem("photos",JSON.stringify(arr));
-}
-
-/* PHOTOS */
-function loadPhotos(){
-  gallery.innerHTML="";
-  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
-  arr.forEach(i=>{
-    let img=document.createElement("img");
-    img.src=i;
-    img.style.width="80px";
-    gallery.appendChild(img);
-  });
-}
-
-/* 🎤 MARY */
 const mary=document.getElementById("mary");
 
-function speak(t){
-  speechSynthesis.speak(new SpeechSynthesisUtterance(t));
+function speak(text){
+  speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }
 
-function reply(input){
-  if(input.includes("1+1")) return "It's two... how do you not know that?";
-  if(input.includes("go home")) { goHome(); return "Going home."; }
-  if(input.includes("hi")) return "Hey! I'm Mary.";
-  return "I'm still learning.";
+/* FAKE CHATGPT-LIKE LOGIC */
+function smartReply(input){
+
+  if(input.includes("time")){
+    return "I don't know, why don’t you stick your head out a window or something?";
+  }
+
+  if(input.includes("1+1")){
+    return "It's two... how do you not know that?";
+  }
+
+  if(input.includes("hi") || input.includes("hello")){
+    return "Oh great, you're talking to me again. Hi.";
+  }
+
+  if(input.includes("who are you")){
+    return "I'm Mary. Basically smarter than you, but nicer about it.";
+  }
+
+  if(input.includes("go home")){
+    goHome();
+    return "Relax, I'm taking you home.";
+  }
+
+  if(input.includes("open")){
+    if(input.includes("camera")) openApp("camera");
+    if(input.includes("settings")) openApp("settings");
+    return "Done. Try to keep up.";
+  }
+
+  /* fallback (chatgpt-like feel) */
+  const responses = [
+    "That's... interesting. Not in a good way.",
+    "I mean, I could answer that, but do I want to?",
+    "You're really testing me today.",
+    "Let me think... nope, still questionable.",
+    "I guess that makes sense... kinda."
+  ];
+
+  return responses[Math.floor(Math.random()*responses.length)];
 }
 
+/* VOICE */
 const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
@@ -291,9 +258,9 @@ rec.onresult=e=>{
 
   if(text.includes("hey mary")){
     mary.style.display="block";
-    speak("Hi!");
+    speak("What now?");
   }else{
-    speak(reply(text));
+    speak(smartReply(text));
   }
 };
 
