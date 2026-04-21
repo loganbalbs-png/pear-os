@@ -11,101 +11,55 @@ body{
   justify-content:center;
   align-items:center;
   height:100vh;
-  font-family:-apple-system;
+  font-family:sans-serif;
 }
 
-/* PHONE */
 .phone{
   width:320px;
   height:600px;
   border-radius:60px;
-  overflow:hidden;
-  background:#0b2c6b;
+  background:#0a2a66;
   position:relative;
+  overflow:hidden;
   color:white;
 }
 
-/* LOCK */
-#lock{
+/* TOP */
+.topbar{
   position:absolute;
-  width:100%;height:100%;
-  background:linear-gradient(#0b2c6b,#000);
+  top:10px;
+  width:100%;
   display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:10;
+  justify-content:space-around;
 }
 
-.dots{display:flex;gap:10px;margin:15px;}
-.dot{width:12px;height:12px;border-radius:50%;background:#555;}
-.fill{background:white;}
-
-.keypad button{
-  width:60px;height:60px;border-radius:50%;
-  margin:5px;
-  background:#111;color:white;font-size:20px;
+.bubble{
+  background:rgba(0,0,0,0.6);
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:12px;
 }
 
 /* SCREENS */
-.screen{
-  position:absolute;
-  width:100%;height:100%;
-  display:none;
-}
+.screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
 
 /* GRID */
-.grid{
-  margin-top:80px;
-  text-align:center;
-}
+.grid{text-align:center;margin-top:80px;}
+.app{display:inline-block;margin:10px;font-size:11px;}
 
-/* APPS */
-.app{
-  display:inline-block;
-  margin:12px;
-  font-size:11px;
-}
-
-/* PEAR ICON STYLE */
 .icon{
-  width:70px;height:70px;
+  width:65px;height:65px;
   border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, #fff6, transparent),
-             linear-gradient(#4da6ff,#003c99);
-  box-shadow:0 10px 20px rgba(0,0,0,0.7),
-             inset 0 5px 10px rgba(255,255,255,0.4);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
+  background-size:cover;
+  box-shadow:0 8px 15px rgba(0,0,0,0.9);
 }
-
-/* COLORS */
-.msg{background:linear-gradient(#6fff7a,#00a63c);}
-.cam{background:linear-gradient(#ddd,#555);}
-.photos{background:linear-gradient(#ff7,#f06);}
-.browser{background:linear-gradient(#6cf,#06c);}
-.game{background:linear-gradient(#ff9,#f60);}
-.settings{background:linear-gradient(#bbb,#333);}
-.store{background:linear-gradient(#8cf,#05a);}
 
 /* EXIT */
 .exit{
   position:absolute;
   top:10px;right:10px;
-  background:red;
-  padding:6px;
-}
-
-/* ANIMATION */
-.open{
-  animation:openApp 0.25s ease;
-}
-@keyframes openApp{
-  from{transform:scale(0.8);opacity:0;}
-  to{transform:scale(1);opacity:1;}
+  background:red;padding:5px;
 }
 
 /* MARY */
@@ -121,59 +75,93 @@ body{
   animation:float 2s infinite;
 }
 @keyframes float{
-  50%{transform:translateX(-50%) translateY(-10px);}
+  50%{transform:translate(-50%,-10px);}
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="phone">
+<div class="phone" id="phone">
 
-<!-- LOCK -->
-<div id="lock">
-<h2>Enter Passcode</h2>
-
-<div class="dots" id="dots">
-<div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-</div>
-
-<div class="keypad">
-<button onclick="press(1)">1</button>
-<button onclick="press(2)">2</button>
-<button onclick="press(3)">3</button><br>
-<button onclick="press(4)">4</button>
-<button onclick="press(5)">5</button>
-<button onclick="press(6)">6</button><br>
-<button onclick="press(7)">7</button>
-<button onclick="press(8)">8</button>
-<button onclick="press(9)">9</button><br>
-<button onclick="press(0)">0</button>
-</div>
+<!-- TOP -->
+<div class="topbar">
+  <div class="bubble">☀️ 23°</div>
+  <div class="bubble" id="time"></div>
+  <div class="bubble" onclick="openApp('settings')">Customize</div>
 </div>
 
 <!-- HOME -->
-<div id="home" class="screen">
-
+<div id="home" class="screen active">
 <div class="grid" id="apps">
 
-<div class="app"><div class="icon msg" onclick="openApp('messages')">💬</div>Messages</div>
-<div class="app"><div class="icon cam" onclick="openApp('camera')">📷</div>Camera</div>
-<div class="app"><div class="icon photos" onclick="openApp('photos')">🌼</div>Photos</div>
-<div class="app"><div class="icon browser" onclick="openApp('browser')">🌐</div>Browser</div>
-<div class="app"><div class="icon game" onclick="openApp('game')">🎮</div>Game</div>
-<div class="app"><div class="icon settings" onclick="openApp('settings')">⚙️</div>Settings</div>
-<div class="app"><div class="icon store" onclick="openApp('store')">🛍</div>Store</div>
+<div class="app">
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2462/2462719.png')" onclick="openApp('messages')"></div>
+Messages
+</div>
+
+<div class="app">
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2920/2920349.png')" onclick="openApp('camera')"></div>
+Camera
+</div>
+
+<div class="app">
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/841/841364.png')" onclick="openApp('browser')"></div>
+Pear Brows
+</div>
+
+<div class="app">
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/149/149071.png')" onclick="openApp('photos')"></div>
+Photos
+</div>
+
+<div class="app">
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/1170/1170678.png')" onclick="openApp('store')"></div>
+App Store
+</div>
+
+<div class="app">
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png')" onclick="openApp('settings')"></div>
+Settings
+</div>
+
+<div class="app">
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/5968/5968756.png')" onclick="openApp('slap')"></div>
+Slap
+</div>
 
 </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+
+<h3>Settings</h3>
+Brightness:
+<input type="range" min="0.5" max="1.5" step="0.1"
+oninput="document.body.style.filter='brightness('+this.value+')'">
+
+<h4>Customize</h4>
+<button onclick="phone.style.background='#1a4fff'">Blue</button>
+<button onclick="phone.style.background='#000'">Black</button>
+<button onclick="phone.style.background='#4b0082'">Purple</button>
+
+</div>
+
+<!-- BROWSER -->
+<div id="browser" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<input id="search" placeholder="Search...">
+<button onclick="frame.src='https://www.bing.com/search?q='+search.value">Go</button>
+<iframe id="frame" style="width:100%;height:80%"></iframe>
 </div>
 
 <!-- CAMERA -->
 <div id="camera" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <video id="cam" autoplay></video>
-<button onclick="snap()">📸</button>
+<button onclick="takePhoto()">📸</button>
 <canvas id="canvas"></canvas>
 </div>
 
@@ -183,71 +171,55 @@ body{
 <div id="gallery"></div>
 </div>
 
-<!-- BROWSER -->
-<div id="browser" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<input id="search"><button onclick="goSearch()">Go</button>
-<iframe id="frame" style="width:100%;height:80%"></iframe>
-</div>
-
-<!-- GAME -->
-<div id="game" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<canvas id="g" width="300" height="400"></canvas>
-</div>
-
-<!-- SETTINGS -->
-<div id="settings" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-Brightness:
-<input type="range" min="0.5" max="1.5" step="0.1"
-oninput="document.body.style.filter='brightness('+this.value+')'">
-</div>
-
 <!-- STORE -->
 <div id="store" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<h3>App Store</h3>
-
-<button onclick="installApp('Notes','📝')">Install Notes</button>
-<button onclick="installApp('Clock','⏰')">Install Clock</button>
-
+<button onclick="installGame()">Install Flappy</button>
 </div>
 
-<!-- MARY -->
+<!-- GAME -->
+<div id="flappy" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<canvas id="game" width="300" height="400"></canvas>
+</div>
+
+<!-- SLAP -->
+<div id="slap" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+
+<h2 style="text-align:center">TheSlap.com</h2>
+
+<div style="padding:10px">
+  <div style="background:#222;padding:10px;border-radius:10px;margin-bottom:10px">
+    <b>@Tori</b><p>Just performed!! 🎤</p>
+  </div>
+
+  <input id="postInput" placeholder="Post something..." style="width:70%">
+  <button onclick="postSlap()">Post</button>
+
+  <div id="posts"></div>
+</div>
+</div>
+
 <div id="mary"></div>
 
 </div>
 
 <script>
 
-/* LOCK */
-let pass="1234",input="";
-function press(n){
-  input+=n;
-  dots.children[input.length-1].classList.add("fill");
-
-  if(input.length===4){
-    if(input===pass){
-      lock.style.display="none";
-      document.getElementById("home").classList.add("active");
-    }else{
-      alert("Wrong");
-      input="";
-      [...dots.children].forEach(d=>d.classList.remove("fill"));
-    }
-  }
-}
+/* TIME */
+setInterval(()=>{
+  time.innerText=new Date().toLocaleTimeString();
+},1000);
 
 /* NAV */
 function openApp(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  let app=document.getElementById(id);
-  app.classList.add('active','open');
+  document.getElementById(id).classList.add('active');
 
   if(id==="camera"){
     navigator.mediaDevices.getUserMedia({video:true})
-    .then(s=>cam.srcObject=s);
+    .then(stream=>cam.srcObject=stream);
   }
 
   if(id==="photos") loadPhotos();
@@ -259,7 +231,7 @@ function goHome(){
 }
 
 /* CAMERA */
-function snap(){
+function takePhoto(){
   canvas.width=cam.videoWidth;
   canvas.height=cam.videoHeight;
   canvas.getContext("2d").drawImage(cam,0,0);
@@ -282,58 +254,85 @@ function loadPhotos(){
   });
 }
 
-/* BROWSER */
-function goSearch(){
-  frame.src="https://www.bing.com/search?q="+search.value;
+/* STORE */
+function installGame(){
+  let app=document.createElement("div");
+  app.className="app";
+  app.innerHTML=`<div class="icon" style="background:yellow"
+  onclick="openApp('flappy');startGame();"></div>Flappy`;
+  apps.appendChild(app);
 }
 
 /* GAME */
-let ctx=g.getContext("2d"),y=150,v=0;
+let ctx=document.getElementById("game").getContext("2d");
+let bird,pipes,run;
+
+function startGame(){
+  bird={x:50,y:150,v:0};
+  pipes=[];
+  run=true;
+  spawn(); loop();
+}
+
+function spawn(){
+  let top=Math.random()*200;
+  pipes.push({x:300,top,bottom:top+120});
+  if(run)setTimeout(spawn,1500);
+}
+
 function loop(){
+  if(!run)return;
+
   ctx.clearRect(0,0,300,400);
-  v+=0.5;y+=v;
-  ctx.fillRect(50,y,20,20);
+  bird.v+=0.5; bird.y+=bird.v;
+  ctx.fillRect(bird.x,bird.y,20,20);
+
+  pipes.forEach(p=>{
+    p.x-=2;
+    ctx.fillRect(p.x,0,30,p.top);
+    ctx.fillRect(p.x,p.bottom,30,400);
+
+    if(bird.x<p.x+30 && bird.x+20>p.x &&
+      (bird.y<p.top||bird.y+20>p.bottom)){
+      run=false;
+    }
+  });
+
   requestAnimationFrame(loop);
 }
-loop();
-document.addEventListener("click",()=>v=-8);
 
-/* STORE */
-function installApp(name,emoji){
-  let div=document.createElement("div");
-  div.className="app";
-  div.innerHTML=`<div class="icon">${emoji}</div>${name}`;
-  apps.appendChild(div);
+document.addEventListener("click",()=>{if(run)bird.v=-8});
+
+/* SLAP */
+function postSlap(){
+  let text=postInput.value;
+  if(!text)return;
+
+  let post=document.createElement("div");
+  post.style.background="#333";
+  post.style.padding="10px";
+  post.style.marginTop="10px";
+  post.innerHTML="<b>@You</b><p>"+text+"</p>";
+
+  posts.prepend(post);
+  postInput.value="";
 }
 
-/* 🤖 MARY (SASSY) */
+/* MARY */
 const mary=document.getElementById("mary");
 
 function speak(t){
   speechSynthesis.speak(new SpeechSynthesisUtterance(t));
 }
 
-function reply(text){
-  if(text.includes("time"))
-    return "I don’t know, go look outside.";
-
-  if(text.includes("hi"))
-    return "Wow. A greeting. Amazing.";
-
-  if(text.includes("go home")){
-    goHome();
-    return "Relax, I got it.";
-  }
-
-  if(text.includes("open camera")){
-    openApp("camera");
-    return "There. Try not to break it.";
-  }
-
+function reply(input){
+  if(input.includes("1+1")) return "It's two… seriously?";
+  if(input.includes("time")) return "Look at the screen.";
+  if(input.includes("open camera")){openApp("camera");return "Done.";}
+  if(input.includes("go home")){goHome();return "You're welcome.";}
   return "I'm not impressed.";
 }
 
-/* VOICE */
 const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
@@ -342,7 +341,7 @@ rec.onresult=e=>{
 
   if(text.includes("hey mary")){
     mary.style.display="block";
-    speak("What now?");
+    speak("What?");
   }else{
     speak(reply(text));
   }
