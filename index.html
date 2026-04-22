@@ -14,34 +14,32 @@ body{
   font-family:sans-serif;
 }
 
+/* PHONE */
 .phone{
   width:320px;
   height:600px;
   border-radius:60px;
-  background:#0b2c6b;
+  background:#0a2a66;
   position:relative;
   overflow:hidden;
   color:white;
 }
 
-/* TRIANGLE BUBBLES */
+/* TOP BUBBLES */
 .topbar{
   position:absolute;
   top:10px;
   width:100%;
   display:flex;
   justify-content:space-around;
+  z-index:5;
 }
 
 .bubble{
-  width:70px;
-  height:30px;
   background:rgba(0,0,0,0.6);
+  padding:5px 10px;
   border-radius:20px;
   font-size:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   animation:float 3s infinite;
 }
 
@@ -55,41 +53,42 @@ body{
 .screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
 
-.grid{
-  text-align:center;
-  margin-top:80px;
+/* SWIPE PAGES */
+.pages{
+  display:flex;
+  width:200%;
+  transition:0.4s;
+}
+.page{
+  width:100%;
+  flex-shrink:0;
 }
 
-.app{
-  display:inline-block;
-  margin:12px;
-  font-size:11px;
-}
+/* GRID */
+.grid{text-align:center;margin-top:80px;}
 
+.app{display:inline-block;margin:10px;font-size:11px;}
+
+/* PEAR ICON STYLE */
 .icon{
   width:65px;height:65px;
   border-radius:50%;
-  position:relative;
+  background-size:cover;
+  background-position:center;
   box-shadow:
-    inset 0 4px 8px rgba(255,255,255,0.5),
-    inset 0 -5px 10px rgba(0,0,0,0.7),
-    0 8px 15px rgba(0,0,0,0.9);
+    inset 0 3px 6px rgba(255,255,255,0.4),
+    inset 0 -4px 8px rgba(0,0,0,0.6),
+    0 10px 20px rgba(0,0,0,0.9);
 }
 
-.icon img{
-  width:65%;
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-}
-
+/* EXIT */
 .exit{
   position:absolute;
   top:10px;right:10px;
   background:red;padding:5px;
 }
 
-/* MARY ORB */
+/* MARY */
 #mary{
   position:absolute;
   bottom:20px;
@@ -101,31 +100,6 @@ body{
   display:none;
   animation:float 2s infinite;
 }
-
-/* PEAR BROWSER */
-.browserBar{
-  background:#111;
-  padding:5px;
-  display:flex;
-}
-
-.browserBar input{
-  flex:1;
-  padding:5px;
-}
-
-/* SLAP STYLE */
-.slapHeader{
-  background:#003366;
-  color:orange;
-  padding:10px;
-  font-weight:bold;
-}
-
-/* VIDEO */
-video,canvas{
-  width:100%;
-}
 </style>
 </head>
 
@@ -133,62 +107,81 @@ video,canvas{
 
 <div class="phone" id="phone">
 
-<!-- BUBBLES -->
+<!-- TOP -->
 <div class="topbar">
-  <div class="bubble">☀️</div>
+  <div class="bubble">☀️ 23°</div>
   <div class="bubble" id="time"></div>
-  <div class="bubble" onclick="openApp('settings')">⚙️</div>
+  <div class="bubble" onclick="openApp('settings')">Customize</div>
 </div>
 
 <!-- HOME -->
 <div id="home" class="screen active">
+<div class="pages" id="pages">
+
+<!-- PAGE 1 -->
+<div class="page">
 <div class="grid" id="apps">
 
 <div class="app">
-<div class="icon" style="background:#2ecc71" onclick="openApp('messages')"></div>
+<div class="icon" style="background:linear-gradient(green,lightgreen)" onclick="openApp('messages')"></div>
 Messages
 </div>
 
 <div class="app">
-<div class="icon" style="background:#444" onclick="openApp('camera')"></div>
+<div class="icon" style="background:radial-gradient(gray,black)" onclick="openApp('camera')"></div>
 Camera
 </div>
 
 <div class="app">
-<div class="icon" style="background:orange" onclick="openApp('browser')"></div>
+<div class="icon" style="background:linear-gradient(orange,yellow)" onclick="openApp('browser')"></div>
 Pear Brows
 </div>
 
 <div class="app">
-<div class="icon" style="background:#ffcc00" onclick="openApp('photos')"></div>
+<div class="icon" style="background:linear-gradient(#ffcc00,#ff6600)" onclick="openApp('photos')"></div>
 Photos
 </div>
 
 <div class="app">
-<div class="icon" style="background:#3498db" onclick="openApp('store')"></div>
+<div class="icon" style="background:linear-gradient(#0ff,#08f)" onclick="openApp('store')"></div>
 App Store
 </div>
 
 <div class="app">
-<div class="icon" style="background:#7f8c8d" onclick="openApp('settings')"></div>
+<div class="icon" style="background:linear-gradient(gray,black)" onclick="openApp('settings')"></div>
 Settings
 </div>
 
 <div class="app">
-<div class="icon" style="background:red" onclick="openApp('slap')"></div>
+<div class="icon" style="background:linear-gradient(#ff6600,#ff0000)" onclick="openApp('slap')"></div>
 TheSlap
 </div>
 
 </div>
 </div>
 
-<!-- SLAP -->
+<!-- PAGE 2 -->
+<div class="page">
+<div class="grid">
+
+<div class="app">
+<div class="icon" style="background:yellow" onclick="openApp('flappy');startGame();"></div>
+Flappy
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- SLAP APP -->
 <div id="slap" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 
-<div class="slapHeader">TheSlap</div>
-<img src="file_00000000194871f8ac93bd49727af475" style="width:100%">
-<img src="file_00000000f4f871fdac1ec70333f368b0" style="width:100%">
+<iframe src="https://www.theslap.com"
+style="width:100%;height:90%;border:none;background:#0b2c6b">
+</iframe>
 
 </div>
 
@@ -198,44 +191,26 @@ TheSlap
 
 <h3>Settings</h3>
 
-<button onclick="openApp('customize')">Customize Dynamic Bubble</button>
-
-</div>
-
-<!-- CUSTOMIZE -->
-<div id="customize" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-
-<h3>Dynamic Bubble Command</h3>
-<input id="cmd" placeholder="type command">
-<button onclick="saveCmd()">Save</button>
+<p>Brightness</p>
+<input type="range" min="0.5" max="1.5" step="0.1"
+oninput="document.body.style.filter='brightness('+this.value+')'">
 
 </div>
 
 <!-- BROWSER -->
 <div id="browser" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-
-<div class="browserBar">
-<input id="search">
-<button onclick="goSearch()">Go</button>
-</div>
-
+<input id="search" placeholder="Search...">
+<button onclick="frame.src='https://www.bing.com/search?q='+search.value">Go</button>
 <iframe id="frame" style="width:100%;height:80%"></iframe>
-
 </div>
 
 <!-- CAMERA -->
 <div id="camera" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-
 <video id="cam" autoplay></video>
-<button onclick="takePhoto()">📸 Photo</button>
-<button onclick="startRec()">🎥 Record</button>
-<button onclick="stopRec()">Stop</button>
-
+<button onclick="takePhoto()">📸</button>
 <canvas id="canvas"></canvas>
-
 </div>
 
 <!-- PHOTOS -->
@@ -247,7 +222,7 @@ TheSlap
 <!-- STORE -->
 <div id="store" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<button onclick="installFlappy()">Install Flappy</button>
+<button onclick="installGame()">Install Flappy</button>
 </div>
 
 <!-- GAME -->
@@ -263,7 +238,9 @@ TheSlap
 <script>
 
 /* TIME */
-setInterval(()=>time.innerText=new Date().toLocaleTimeString(),1000);
+setInterval(()=>{
+  time.innerText=new Date().toLocaleTimeString();
+},1000);
 
 /* NAV */
 function openApp(id){
@@ -271,96 +248,93 @@ function openApp(id){
   document.getElementById(id).classList.add('active');
 
   if(id==="camera"){
-    navigator.mediaDevices.getUserMedia({video:true,audio:true})
-    .then(stream=>{
-      cam.srcObject=stream;
-      mediaStream=stream;
-    });
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(stream=>cam.srcObject=stream);
   }
-
-  if(id==="photos") loadMedia();
 }
 
+/* HOME */
 function goHome(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   home.classList.add('active');
 }
 
-/* BROWSER */
-function goSearch(){
-  frame.src="https://www.bing.com/search?q="+search.value;
-}
+/* SWIPE */
+let startX=0;
+home.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+home.addEventListener("touchend",e=>{
+  let diff=e.changedTouches[0].clientX-startX;
+  if(diff<-50) pages.style.transform="translateX(-100%)";
+  if(diff>50) pages.style.transform="translateX(0)";
+});
 
-/* CAMERA PHOTO */
+/* CAMERA */
 function takePhoto(){
   canvas.width=cam.videoWidth;
   canvas.height=cam.videoHeight;
   canvas.getContext("2d").drawImage(cam,0,0);
-
   let img=canvas.toDataURL();
-  saveMedia(img,"img");
+  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
+  arr.push(img);
+  localStorage.setItem("photos",JSON.stringify(arr));
 }
 
-/* VIDEO */
-let recorder, chunks=[], mediaStream;
-
-function startRec(){
-  recorder=new MediaRecorder(mediaStream);
-  recorder.ondataavailable=e=>chunks.push(e.data);
-  recorder.onstop=e=>{
-    let blob=new Blob(chunks);
-    let url=URL.createObjectURL(blob);
-    saveMedia(url,"video");
-    chunks=[];
-  };
-  recorder.start();
-}
-
-function stopRec(){ recorder.stop(); }
-
-/* SAVE MEDIA */
-function saveMedia(data,type){
-  let arr=JSON.parse(localStorage.getItem("media")||"[]");
-  arr.push({data,type});
-  localStorage.setItem("media",JSON.stringify(arr));
-}
-
-/* LOAD MEDIA */
-function loadMedia(){
+/* PHOTOS */
+function loadPhotos(){
   gallery.innerHTML="";
-  let arr=JSON.parse(localStorage.getItem("media")||"[]");
-
-  arr.forEach(m=>{
-    if(m.type==="img"){
-      let i=document.createElement("img");
-      i.src=m.data;
-      i.style.width="80px";
-      gallery.appendChild(i);
-    }else{
-      let v=document.createElement("video");
-      v.src=m.data;
-      v.controls=true;
-      v.style.width="80px";
-      gallery.appendChild(v);
-    }
+  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
+  arr.forEach(i=>{
+    let img=document.createElement("img");
+    img.src=i;
+    img.style.width="80px";
+    gallery.appendChild(img);
   });
 }
 
-/* STORE INSTALL */
-function installFlappy(){
-  let app=document.createElement("div");
-  app.className="app";
-  app.innerHTML=`
-  <div class="icon" style="background:yellow"
-  onclick="openApp('flappy')"></div>
-  Flappy`;
-  apps.appendChild(app);
+/* GAME */
+let ctx=game.getContext("2d");
+let bird,pipes,run;
+
+function startGame(){
+  bird={x:50,y:150,v:0};
+  pipes=[];
+  run=true;
+  spawn(); loop();
 }
 
-/* GAME (same as before) */
-let ctx=game.getContext("2d"),bird,pipes,run;
+function spawn(){
+  let top=Math.random()*200;
+  pipes.push({x:300,top,bottom:top+120});
+  if(run)setTimeout(spawn,1500);
+}
 
-/* MARY SMART */
+function loop(){
+  if(!run)return;
+
+  ctx.clearRect(0,0,300,400);
+
+  bird.v+=0.5;
+  bird.y+=bird.v;
+
+  ctx.fillRect(bird.x,bird.y,20,20);
+
+  pipes.forEach(p=>{
+    p.x-=2;
+    ctx.fillRect(p.x,0,30,p.top);
+    ctx.fillRect(p.x,p.bottom,30,400);
+
+    if(bird.x<p.x+30 && bird.x+20>p.x &&
+       (bird.y<p.top||bird.y+20>p.bottom)){
+      run=false;
+    }
+  });
+
+  requestAnimationFrame(loop);
+}
+
+document.addEventListener("click",()=>{if(run)bird.v=-8});
+
+/* ===== MARY SMART ===== */
 const mary=document.getElementById("mary");
 
 function speak(t){
@@ -368,9 +342,23 @@ function speak(t){
 }
 
 function reply(input){
-  if(input.includes("hello")) return "Hey.";
-  if(input.includes("time")) return new Date().toLocaleTimeString();
-  return "Yeah I heard you.";
+
+  if(input.includes("1+1"))
+    return "It's two... seriously?";
+
+  if(input.includes("time"))
+    return "Look at the clock... oh wait fine, it's " + new Date().toLocaleTimeString();
+
+  if(input.includes("hello")||input.includes("hi"))
+    return "Hey! What do you want?";
+
+  if(input.includes("weather"))
+    return "It's nice... go outside for once.";
+
+  if(input.includes("who are you"))
+    return "I'm Mary. Obviously.";
+
+  return "Hmm... I actually understood that. Try something harder.";
 }
 
 /* VOICE */
@@ -389,11 +377,6 @@ rec.onresult=e=>{
 };
 
 rec.start();
-
-/* CUSTOM COMMAND */
-function saveCmd(){
-  localStorage.setItem("cmd",cmd.value);
-}
 
 </script>
 
