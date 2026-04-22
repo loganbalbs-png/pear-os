@@ -70,7 +70,7 @@ body{
   transform:translateX(-50%);
   width:70px;height:70px;
   border-radius:50%;
-  background:radial-gradient(circle,orange,yellow);
+  background:radial-gradient(circle,orange,yellow,green);
   display:none;
   animation:float 2s infinite;
 }
@@ -325,8 +325,9 @@ function speak(t){
   speechSynthesis.speak(new SpeechSynthesisUtterance(t));
 }
 
-function reply(input){
-  if(input.includes("1+1")) return "It's two… seriously?";
+function if(input.includes("what time is it")){
+  return "Stick your head out the window.";
+} if(input.includes("1+1")) return "It's two… seriously?";
   if(input.includes("time")) return "Look at the screen.";
   if(input.includes("open camera")){openApp("camera");return "Done.";}
   if(input.includes("go home")){goHome();return "You're welcome.";}
