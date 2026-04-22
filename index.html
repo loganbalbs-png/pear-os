@@ -318,30 +318,35 @@ function postSlap(){
   postInput.value="";
 }
 
-/* MARY */
-const mary=document.getElementById("mary");
 
-function speak(t){
-  speechSynthesis.speak(new SpeechSynthesisUtterance(t));
+  /* ===== MARY SYSTEM ===== */
+const mary = document.getElementById("mary");
+
+function speak(text){
+  speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 }
 
-  }
 function reply(input){
 
   input = input.toLowerCase();
 
-  // 🔥 WHAT YOU WANTED
-  if(input.includes("weather")){
+  // 🔥 WEATHER RESPONSE (what you asked for)
+  if(
+    input.includes("weather") ||
+    input.includes("temperature") ||
+    input.includes("is it raining") ||
+    input.includes("how's the weather")
+  ){
     return "Stick your head out the window.";
   }
 
-  // other responses
+  // basic responses
   if(input.includes("hello") || input.includes("hi")){
     return "Hey.";
   }
 
   if(input.includes("who are you")){
-    return "I'm Mary. Obviously.";
+    return "I'm Mary.";
   }
 
   if(input.includes("time")){
@@ -350,6 +355,23 @@ function reply(input){
 
   return "Yeah, I heard you.";
 }
+
+/* ===== VOICE ===== */
+const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+rec.continuous = true;
+
+rec.onresult = (e) => {
+  let text = e.results[e.results.length - 1][0].transcript.toLowerCase();
+
+  if(text.includes("hey mary")){
+    mary.style.display = "block";
+    speak("Yeah?");
+  } else {
+    speak(reply(text));
+  }
+};
+
+rec.start();
 const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
