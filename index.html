@@ -14,7 +14,6 @@ body{
   font-family:sans-serif;
 }
 
-/* PHONE */
 .phone{
   width:320px;
   height:600px;
@@ -25,14 +24,13 @@ body{
   color:white;
 }
 
-/* TOP BUBBLES */
+/* TOP */
 .topbar{
   position:absolute;
   top:10px;
   width:100%;
   display:flex;
   justify-content:space-around;
-  z-index:5;
 }
 
 .bubble{
@@ -40,45 +38,21 @@ body{
   padding:5px 10px;
   border-radius:20px;
   font-size:12px;
-  animation:float 3s infinite;
-}
-
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-6px);}
-  100%{transform:translateY(0);}
 }
 
 /* SCREENS */
 .screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
 
-/* SWIPE PAGES */
-.pages{
-  display:flex;
-  width:200%;
-  transition:0.4s;
-}
-.page{
-  width:100%;
-  flex-shrink:0;
-}
-
 /* GRID */
 .grid{text-align:center;margin-top:80px;}
-
 .app{display:inline-block;margin:10px;font-size:11px;}
 
-/* PEAR ICON STYLE */
 .icon{
   width:65px;height:65px;
   border-radius:50%;
   background-size:cover;
-  background-position:center;
-  box-shadow:
-    inset 0 3px 6px rgba(255,255,255,0.4),
-    inset 0 -4px 8px rgba(0,0,0,0.6),
-    0 10px 20px rgba(0,0,0,0.9);
+  box-shadow:0 8px 15px rgba(0,0,0,0.9);
 }
 
 /* EXIT */
@@ -96,9 +70,12 @@ body{
   transform:translateX(-50%);
   width:70px;height:70px;
   border-radius:50%;
-  background:radial-gradient(circle,orange,red);
+  background:radial-gradient(circle,orange,yellow);
   display:none;
   animation:float 2s infinite;
+}
+@keyframes float{
+  50%{transform:translate(-50%,-10px);}
 }
 </style>
 </head>
@@ -116,73 +93,44 @@ body{
 
 <!-- HOME -->
 <div id="home" class="screen active">
-<div class="pages" id="pages">
-
-<!-- PAGE 1 -->
-<div class="page">
 <div class="grid" id="apps">
 
 <div class="app">
-<div class="icon" style="background:linear-gradient(green,lightgreen)" onclick="openApp('messages')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2462/2462719.png')" onclick="openApp('messages')"></div>
 Messages
 </div>
 
 <div class="app">
-<div class="icon" style="background:radial-gradient(gray,black)" onclick="openApp('camera')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2920/2920349.png')" onclick="openApp('camera')"></div>
 Camera
 </div>
 
 <div class="app">
-<div class="icon" style="background:linear-gradient(orange,yellow)" onclick="openApp('browser')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/841/841364.png')" onclick="openApp('browser')"></div>
 Pear Brows
 </div>
 
 <div class="app">
-<div class="icon" style="background:linear-gradient(#ffcc00,#ff6600)" onclick="openApp('photos')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/149/149071.png')" onclick="openApp('photos')"></div>
 Photos
 </div>
 
 <div class="app">
-<div class="icon" style="background:linear-gradient(#0ff,#08f)" onclick="openApp('store')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/1170/1170678.png')" onclick="openApp('store')"></div>
 App Store
 </div>
 
 <div class="app">
-<div class="icon" style="background:linear-gradient(gray,black)" onclick="openApp('settings')"></div>
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png')" onclick="openApp('settings')"></div>
 Settings
 </div>
 
 <div class="app">
-<div class="icon" style="background:linear-gradient(#ff6600,#ff0000)" onclick="openApp('slap')"></div>
-TheSlap
+<div class="icon" style="background-image:url('https://cdn-icons-png.flaticon.com/512/5968/5968756.png')" onclick="openApp('slap')"></div>
+Slap
 </div>
 
 </div>
-</div>
-
-<!-- PAGE 2 -->
-<div class="page">
-<div class="grid">
-
-<div class="app">
-<div class="icon" style="background:yellow" onclick="openApp('flappy');startGame();"></div>
-Flappy
-</div>
-
-</div>
-</div>
-
-</div>
-</div>
-
-<!-- SLAP APP -->
-<div id="slap" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-
-<iframe src="https://www.theslap.com"
-style="width:100%;height:90%;border:none;background:#0b2c6b">
-</iframe>
-
 </div>
 
 <!-- SETTINGS -->
@@ -190,10 +138,14 @@ style="width:100%;height:90%;border:none;background:#0b2c6b">
 <div class="exit" onclick="goHome()">Exit</div>
 
 <h3>Settings</h3>
-
-<p>Brightness</p>
+Brightness:
 <input type="range" min="0.5" max="1.5" step="0.1"
 oninput="document.body.style.filter='brightness('+this.value+')'">
+
+<h4>Customize</h4>
+<button onclick="phone.style.background='#1a4fff'">Blue</button>
+<button onclick="phone.style.background='#000'">Black</button>
+<button onclick="phone.style.background='#4b0082'">Purple</button>
 
 </div>
 
@@ -231,6 +183,24 @@ oninput="document.body.style.filter='brightness('+this.value+')'">
 <canvas id="game" width="300" height="400"></canvas>
 </div>
 
+<!-- SLAP -->
+<div id="slap" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+
+<h2 style="text-align:center">TheSlap.com</h2>
+
+<div style="padding:10px">
+  <div style="background:#222;padding:10px;border-radius:10px;margin-bottom:10px">
+    <b>@Tori</b><p>Just performed!! 🎤</p>
+  </div>
+
+  <input id="postInput" placeholder="Post something..." style="width:70%">
+  <button onclick="postSlap()">Post</button>
+
+  <div id="posts"></div>
+</div>
+</div>
+
 <div id="mary"></div>
 
 </div>
@@ -251,28 +221,21 @@ function openApp(id){
     navigator.mediaDevices.getUserMedia({video:true})
     .then(stream=>cam.srcObject=stream);
   }
+
+  if(id==="photos") loadPhotos();
 }
 
-/* HOME */
 function goHome(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  home.classList.add('active');
+  document.getElementById("home").classList.add('active');
 }
-
-/* SWIPE */
-let startX=0;
-home.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-home.addEventListener("touchend",e=>{
-  let diff=e.changedTouches[0].clientX-startX;
-  if(diff<-50) pages.style.transform="translateX(-100%)";
-  if(diff>50) pages.style.transform="translateX(0)";
-});
 
 /* CAMERA */
 function takePhoto(){
   canvas.width=cam.videoWidth;
   canvas.height=cam.videoHeight;
   canvas.getContext("2d").drawImage(cam,0,0);
+
   let img=canvas.toDataURL();
   let arr=JSON.parse(localStorage.getItem("photos")||"[]");
   arr.push(img);
@@ -291,8 +254,17 @@ function loadPhotos(){
   });
 }
 
+/* STORE */
+function installGame(){
+  let app=document.createElement("div");
+  app.className="app";
+  app.innerHTML=`<div class="icon" style="background:yellow"
+  onclick="openApp('flappy');startGame();"></div>Flappy`;
+  apps.appendChild(app);
+}
+
 /* GAME */
-let ctx=game.getContext("2d");
+let ctx=document.getElementById("game").getContext("2d");
 let bird,pipes,run;
 
 function startGame(){
@@ -312,10 +284,7 @@ function loop(){
   if(!run)return;
 
   ctx.clearRect(0,0,300,400);
-
-  bird.v+=0.5;
-  bird.y+=bird.v;
-
+  bird.v+=0.5; bird.y+=bird.v;
   ctx.fillRect(bird.x,bird.y,20,20);
 
   pipes.forEach(p=>{
@@ -324,7 +293,7 @@ function loop(){
     ctx.fillRect(p.x,p.bottom,30,400);
 
     if(bird.x<p.x+30 && bird.x+20>p.x &&
-       (bird.y<p.top||bird.y+20>p.bottom)){
+      (bird.y<p.top||bird.y+20>p.bottom)){
       run=false;
     }
   });
@@ -334,7 +303,22 @@ function loop(){
 
 document.addEventListener("click",()=>{if(run)bird.v=-8});
 
-/* ===== MARY SMART ===== */
+/* SLAP */
+function postSlap(){
+  let text=postInput.value;
+  if(!text)return;
+
+  let post=document.createElement("div");
+  post.style.background="#333";
+  post.style.padding="10px";
+  post.style.marginTop="10px";
+  post.innerHTML="<b>@You</b><p>"+text+"</p>";
+
+  posts.prepend(post);
+  postInput.value="";
+}
+
+/* MARY */
 const mary=document.getElementById("mary");
 
 function speak(t){
@@ -342,26 +326,13 @@ function speak(t){
 }
 
 function reply(input){
-
-  if(input.includes("1+1"))
-    return "It's two... seriously?";
-
-  if(input.includes("time"))
-    return "Look at the clock... oh wait fine, it's " + new Date().toLocaleTimeString();
-
-  if(input.includes("hello")||input.includes("hi"))
-    return "Hey! What do you want?";
-
-  if(input.includes("weather"))
-    return "It's nice... go outside for once.";
-
-  if(input.includes("who are you"))
-    return "I'm Mary. Obviously.";
-
-  return "Hmm... I actually understood that. Try something harder.";
+  if(input.includes("1+1")) return "It's two… seriously?";
+  if(input.includes("time")) return "Look at the screen.";
+  if(input.includes("open camera")){openApp("camera");return "Done.";}
+  if(input.includes("go home")){goHome();return "You're welcome.";}
+  return "I'm not impressed.";
 }
 
-/* VOICE */
 const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
@@ -370,7 +341,7 @@ rec.onresult=e=>{
 
   if(text.includes("hey mary")){
     mary.style.display="block";
-    speak("Yeah?");
+    speak("What?");
   }else{
     speak(reply(text));
   }
