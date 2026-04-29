@@ -3,81 +3,58 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- 🔥 MediaPipe (for real finger tracking) -->
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 
 <style>
-body{
-  margin:0;
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  font-family:sans-serif;
-}
-
-.phone{
-  width:320px;
-  height:600px;
-  border-radius:60px;
-  background:#0b2c6b;
-  position:relative;
-  overflow:hidden;
-  color:white;
-}
-
-/* BUBBLES */
-.topbar{position:absolute;top:10px;width:100%;height:80px;}
-.bubble{
-  width:55px;height:55px;border-radius:50%;
-  background:#111;display:flex;align-items:center;justify-content:center;
-  position:absolute;font-size:12px;
-}
-.bubble:nth-child(1){left:20px;}
-.bubble:nth-child(2){right:20px;}
-.bubble:nth-child(3){left:50%;transform:translateX(-50%);top:35px;}
-
-/* SCREENS */
+body{margin:0;background:black;display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;}
+.phone{width:320px;height:600px;border-radius:60px;background:#0b2c6b;overflow:hidden;position:relative;color:white;}
 .screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
-
 .grid{text-align:center;margin-top:100px;}
 .app{display:inline-block;margin:10px;font-size:11px;}
-
-.icon{
-  width:65px;height:65px;border-radius:50%;
-  background:#444;display:flex;align-items:center;justify-content:center;
-  font-size:24px;
-}
-
+.icon{width:65px;height:65px;border-radius:50%;background:#444;display:flex;align-items:center;justify-content:center;font-size:24px;}
 .exit{position:absolute;top:10px;right:10px;background:red;padding:5px;}
-
 canvas{position:absolute;top:0;left:0;}
 video{width:100%;}
 </style>
 </head>
 
 <body>
-
 <div class="phone">
-
-<!-- TOP -->
-<div class="topbar">
-  <div class="bubble" id="time"></div>
-  <div class="bubble">🌤</div>
-  <div class="bubble">⚙</div>
-</div>
 
 <!-- HOME -->
 <div id="home" class="screen active">
 <div class="grid">
+<div class="app"><div class="icon" onclick="openApp('camera')">📷</div>Camera</div>
+<div class="app"><div class="icon" onclick="openApp('browser')">🌐</div>Browser</div>
+<div class="app"><div class="icon" onclick="openApp('calc')">🧮</div>Calc</div>
 <div class="app"><div class="icon" onclick="openApp('finger')">✋</div>Finger</div>
 </div>
 </div>
 
-<!-- FINGER TRACKING -->
+<!-- CAMERA -->
+<div id="camera" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<video id="cam" autoplay></video>
+</div>
+
+<!-- BROWSER -->
+<div id="browser" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<input id="search">
+<button onclick="frame.src='https://bing.com/search?q='+search.value">Go</button>
+<iframe id="frame" style="width:100%;height:80%"></iframe>
+</div>
+
+<!-- CALC -->
+<div id="calc" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<input id="calcInput">
+<button onclick="calcInput.value=eval(calcInput.value)">=</button>
+</div>
+
+<!-- FINGER -->
 <div id="finger" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <video id="fingerCam" autoplay playsinline></video>
@@ -88,85 +65,112 @@ video{width:100%;}
 
 <script>
 
-/* TIME */
-setInterval(()=>time.innerText=new Date().toLocaleTimeString(),1000);
-
 /* NAV */
 function openApp(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
 
-  if(id==="finger"){
-    startFinger();
-  }
+if(id==="camera"){
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>cam.srcObject=stream);
+}
+
+if(id==="finger"){
+startFinger();
+}
 }
 
 function goHome(){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  home.classList.add('active');
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+home.classList.add('active');
 }
 
-/* ===== REAL FINGER TRACKING ===== */
+/* ===== FINGER TRACKING ===== */
+
 let canvas=document.getElementById("fingerCanvas");
 let ctx=canvas.getContext("2d");
 canvas.width=320;
 canvas.height=400;
 
 let drawing=false;
+let currentColor="red";
 
 const hands=new Hands({
-  locateFile:(file)=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+locateFile:(file)=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
 });
 
 hands.setOptions({
-  maxNumHands:1,
-  modelComplexity:0,
-  minDetectionConfidence:0.7,
-  minTrackingConfidence:0.7
+maxNumHands:1,
+modelComplexity:0,
+minDetectionConfidence:0.7,
+minTrackingConfidence:0.7
 });
 
 hands.onResults(results=>{
-  if(!results.multiHandLandmarks.length) return;
+if(!results.multiHandLandmarks.length) return;
 
-  let lm=results.multiHandLandmarks[0];
+let lm=results.multiHandLandmarks[0];
 
-  let x=lm[8].x*canvas.width;
-  let y=lm[8].y*canvas.height;
+/* finger positions */
+let tips=[4,8,12,16,20];
+let fingersUp=[];
 
-  let tx=lm[4].x*canvas.width;
-  let ty=lm[4].y*canvas.height;
+/* detect fingers up */
+for(let i=0;i<tips.length;i++){
+let tipY=lm[tips[i]].y;
+let baseY=lm[tips[i]-2].y;
+fingersUp[i]=tipY < baseY;
+}
 
-  let dist=Math.hypot(x-tx,y-ty);
+/* COLOR SELECT (only 1 finger up) */
+let count=fingersUp.filter(f=>f).length;
 
-  if(dist<40){
-    if(!drawing){
-      ctx.beginPath();
-      ctx.moveTo(x,y);
-      drawing=true;
-    }else{
-      ctx.lineTo(x,y);
-      ctx.strokeStyle="lime";
-      ctx.lineWidth=3;
-      ctx.stroke();
-    }
-  }else{
-    drawing=false;
-  }
+if(count===1){
+if(fingersUp[0]) currentColor="yellow"; // thumb
+if(fingersUp[1]) currentColor="red";    // index
+if(fingersUp[2]) currentColor="green";  // middle
+if(fingersUp[3]) currentColor="blue";   // ring
+if(fingersUp[4]) currentColor="purple"; // pinky
+}
+
+/* DRAWING */
+let x=lm[8].x*canvas.width;
+let y=lm[8].y*canvas.height;
+
+let tx=lm[4].x*canvas.width;
+let ty=lm[4].y*canvas.height;
+
+let dist=Math.hypot(x-tx,y-ty);
+
+if(dist<40){
+if(!drawing){
+ctx.beginPath();
+ctx.moveTo(x,y);
+drawing=true;
+}else{
+ctx.lineTo(x,y);
+ctx.strokeStyle=currentColor;
+ctx.lineWidth=3;
+ctx.stroke();
+}
+}else{
+drawing=false;
+}
 });
 
 /* CAMERA */
 function startFinger(){
-  const video=document.getElementById("fingerCam");
+const video=document.getElementById("fingerCam");
 
-  const cam=new Camera(video,{
-    onFrame: async ()=>{
-      await hands.send({image:video});
-    },
-    width:320,
-    height:400
-  });
+const cam=new Camera(video,{
+onFrame: async ()=>{
+await hands.send({image:video});
+},
+width:320,
+height:400
+});
 
-  cam.start();
+cam.start();
 }
 
 </script>
