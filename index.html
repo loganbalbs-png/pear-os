@@ -2,35 +2,81 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{margin:0;background:black;display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;}
-.phone{width:320px;height:600px;border-radius:60px;background:#0b2c6b;overflow:hidden;position:relative;color:white;}
-.screen{display:none;position:absolute;width:100%;height:100%;}
-.active{display:block;}
-.grid{text-align:center;margin-top:100px;}
-.app{display:inline-block;margin:10px;font-size:11px;}
-.icon{width:65px;height:65px;border-radius:50%;background:#444;display:flex;align-items:center;justify-content:center;font-size:24px;}
-.exit{position:absolute;top:10px;right:10px;background:red;padding:5px;}
 
-/* BUBBLES */
+<style>
+body{
+  margin:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:sans-serif;
+}
+
+.phone{
+  width:320px;
+  height:600px;
+  border-radius:60px;
+  background:#0b2c6b;
+  position:relative;
+  overflow:hidden;
+  color:white;
+}
+
+/* BUBBLES (triangle) */
 .topbar{position:absolute;top:10px;width:100%;height:80px;}
-.bubble{width:55px;height:55px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;position:absolute;}
+.bubble{
+  width:55px;height:55px;border-radius:50%;
+  background:#111;display:flex;align-items:center;justify-content:center;
+  position:absolute;font-size:12px;
+}
 .bubble:nth-child(1){left:20px;}
 .bubble:nth-child(2){right:20px;}
 .bubble:nth-child(3){left:50%;transform:translateX(-50%);top:35px;}
 
+/* SCREENS */
+.screen{display:none;position:absolute;width:100%;height:100%;}
+.active{display:block;}
+
+.grid{text-align:center;margin-top:100px;}
+.app{display:inline-block;margin:10px;font-size:11px;}
+
+.icon{
+  width:65px;height:65px;border-radius:50%;
+  background:#444;display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+}
+
+.exit{position:absolute;top:10px;right:10px;background:red;padding:5px;}
+
 /* MARY */
-#mary{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:70px;height:70px;border-radius:50%;background:orange;display:none;}
+#mary{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:70px;height:70px;
+  border-radius:50%;
+  background:orange;
+  display:none;
+}
+
+/* CANVAS */
+canvas{position:absolute;top:0;left:0;}
+video{width:100%;}
 </style>
 </head>
 
 <body>
+
 <div class="phone">
 
+<!-- BUBBLES -->
 <div class="topbar">
-<div class="bubble" id="time"></div>
-<div class="bubble" id="weather">🌤</div>
-<div class="bubble" onclick="openApp('settings')">⚙</div>
+  <div class="bubble" id="time"></div>
+  <div class="bubble">🌤</div>
+  <div class="bubble">⚙</div>
 </div>
 
 <!-- HOME -->
@@ -40,9 +86,7 @@ body{margin:0;background:black;display:flex;justify-content:center;align-items:c
 <div class="app"><div class="icon" onclick="openApp('camera')">📷</div>Camera</div>
 <div class="app"><div class="icon" onclick="openApp('browser')">🌐</div>Browser</div>
 <div class="app"><div class="icon" onclick="openApp('calc')">🧮</div>Calc</div>
-<div class="app"><div class="icon" onclick="openApp('books')">📚</div>Books</div>
-<div class="app"><div class="icon" onclick="openApp('color')">🎨</div>Color</div>
-<div class="app"><div class="icon" onclick="openApp('slap')">📺</div>Slap</div>
+<div class="app"><div class="icon" onclick="openApp('finger')">✋</div>Finger</div>
 
 </div>
 </div>
@@ -56,35 +100,23 @@ body{margin:0;background:black;display:flex;justify-content:center;align-items:c
 <!-- BROWSER -->
 <div id="browser" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<input id="search"><button onclick="frame.src='https://bing.com/search?q='+search.value">Go</button>
+<input id="search">
+<button onclick="frame.src='https://bing.com/search?q='+search.value">Go</button>
 <iframe id="frame" style="width:100%;height:80%"></iframe>
 </div>
 
-<!-- CALCULATOR -->
+<!-- CALC -->
 <div id="calc" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <input id="calcInput">
 <button onclick="calcInput.value=eval(calcInput.value)">=</button>
 </div>
 
-<!-- BOOKS -->
-<div id="books" class="screen">
+<!-- FINGER FOLLOWER -->
+<div id="finger" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<p>Book 1: Hello World</p>
-<p>Book 2: Pear Story</p>
-</div>
-
-<!-- COLOR -->
-<div id="color" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<canvas id="draw" width="300" height="400"></canvas>
-</div>
-
-<!-- SLAP -->
-<div id="slap" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<h2>TheSlap</h2>
-<p>Welcome back!</p>
+<video id="fingerCam" autoplay></video>
+<canvas id="fingerCanvas"></canvas>
 </div>
 
 <div id="mary"></div>
@@ -98,57 +130,109 @@ setInterval(()=>time.innerText=new Date().toLocaleTimeString(),1000);
 
 /* NAV */
 function openApp(id){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 
-if(id==="camera"){
-navigator.mediaDevices.getUserMedia({video:true})
-.then(stream=>cam.srcObject=stream);
-}
-}
-function goHome(){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));home.classList.add('active');}
+  if(id==="camera"){
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(stream=>cam.srcObject=stream);
+  }
 
-/* DRAW APP */
-let ctx=draw.getContext("2d");
-draw.addEventListener("click",e=>{
-ctx.fillRect(e.offsetX,e.offsetY,5,5);
+  if(id==="finger"){
+    startFinger();
+  }
+}
+
+function goHome(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  home.classList.add('active');
+}
+
+/* ===== FINGER FOLLOWER ===== */
+let fingerPoints=[];
+let fCanvas=document.getElementById("fingerCanvas");
+let fCtx=fCanvas.getContext("2d");
+
+function startFinger(){
+  navigator.mediaDevices.getUserMedia({video:true})
+  .then(stream=>fingerCam.srcObject=stream);
+
+  fCanvas.width=320;
+  fCanvas.height=400;
+  fingerPoints=[];
+  drawFinger();
+}
+
+function drawFinger(){
+  fCtx.clearRect(0,0,fCanvas.width,fCanvas.height);
+
+  if(fingerPoints.length>1){
+    fCtx.beginPath();
+    fCtx.moveTo(fingerPoints[0].x,fingerPoints[0].y);
+    for(let i=1;i<fingerPoints.length;i++){
+      fCtx.lineTo(fingerPoints[i].x,fingerPoints[i].y);
+    }
+    fCtx.strokeStyle="lime";
+    fCtx.lineWidth=3;
+    fCtx.stroke();
+  }
+
+  fingerPoints.forEach(p=>{
+    fCtx.beginPath();
+    fCtx.arc(p.x,p.y,5,0,Math.PI*2);
+    fCtx.fillStyle="yellow";
+    fCtx.fill();
+  });
+
+  requestAnimationFrame(drawFinger);
+}
+
+fCanvas.addEventListener("click",(e)=>{
+  let rect=fCanvas.getBoundingClientRect();
+  fingerPoints.push({
+    x:e.clientX-rect.left,
+    y:e.clientY-rect.top
+  });
 });
 
-/* MARY */
+/* ===== MARY ===== */
 let state=null;
 
-function speak(t){speechSynthesis.speak(new SpeechSynthesisUtterance(t));}
+function speak(t){
+  speechSynthesis.speak(new SpeechSynthesisUtterance(t));
+}
 
 function reply(input){
-input=input.toLowerCase();
+  input=input.toLowerCase();
 
-/* JAM SYSTEM */
-if(input.includes("play my jam")){
-state="jam";
-return "Which one? one or two.";
-}
-if(state==="jam"){
-state=null;
-if(input.includes("one")){
-new Audio("https://www.myinstants.com/media/sounds/icarly-theme.mp3").play();
-return "Playing jam one.";
-}
-if(input.includes("two")){
-new Audio("https://www.myinstants.com/media/sounds/victorious.mp3").play();
-return "Playing jam two.";
-}
-}
+  if(input.includes("weather")){
+    return "Stick your head out the window.";
+  }
 
-/* WEATHER ATTITUDE */
-if(input.includes("weather")){
-return "Stick your head out the window.";
-}
+  if(input.includes("play my jam")){
+    state="jam";
+    return "Which one, one or two?";
+  }
 
-/* BASIC */
-if(input.includes("hello")) return "What do you want?";
-if(input.includes("time")) return new Date().toLocaleTimeString();
+  if(state==="jam"){
+    state=null;
 
-return "Try asking something useful.";
+    if(input.includes("one")){
+      new Audio("https://www.myinstants.com/media/sounds/icarly-theme-song.mp3").play();
+      return "Playing jam one.";
+    }
+
+    if(input.includes("two")){
+      new Audio("https://www.myinstants.com/media/sounds/victorious-theme-song.mp3").play();
+      return "Playing jam two.";
+    }
+  }
+
+  if(input.includes("hello")){
+    return "What do you want?";
+  }
+
+  return "Try again.";
 }
 
 /* VOICE */
@@ -156,19 +240,20 @@ const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
 rec.continuous=true;
 
 rec.onresult=e=>{
-let text=e.results[e.results.length-1][0].transcript.toLowerCase();
+  let text=e.results[e.results.length-1][0].transcript.toLowerCase();
 
-if(text.includes("hey mary")){
-mary.style.display="block";
-speak("Yeah?");
-}else{
-speak(reply(text));
-}
+  if(text.includes("hey mary")){
+    mary.style.display="block";
+    speak("Yeah?");
+  }else{
+    speak(reply(text));
+  }
 };
 
 rec.start();
 
 </script>
+
 </body>
 </html>
 <script src="upgrade.js"></script>
