@@ -7,113 +7,152 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 
 <style>
-body{margin:0;background:black;display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;}
-.phone{width:320px;height:600px;border-radius:60px;background:#0b2c6b;overflow:hidden;position:relative;color:white;}
-
-/* SCREENS */
-.screen{position:absolute;width:100%;height:100%;transition:0.3s;}
-.hidden{display:none;}
-
-/* HOME PAGES */
-.pages{display:flex;width:200%;height:100%;transition:0.4s;}
-.page{width:100%;text-align:center;margin-top:100px;}
-
-.app{display:inline-block;margin:10px;font-size:11px;}
-.icon{width:65px;height:65px;border-radius:50%;background:#444;display:flex;align-items:center;justify-content:center;font-size:24px;}
-
-/* DOCK */
-.dock{
-position:absolute;bottom:10px;width:100%;
-display:flex;justify-content:center;
+body{
+  margin:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:sans-serif;
 }
 
-/* EXIT */
-.exit{position:absolute;top:10px;right:10px;background:red;padding:5px;}
-
-video{width:100%;transform:scaleX(-1);}
-canvas{position:absolute;top:0;left:0;}
+.phone{
+  width:320px;
+  height:600px;
+  border-radius:60px;
+  background:#0b2c6b;
+  overflow:hidden;
+  position:relative;
+  color:white;
+}
 
 /* BUBBLES */
 .topbar{position:absolute;top:10px;width:100%;height:80px;}
-.bubble{width:55px;height:55px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;position:absolute;}
+.bubble{
+  width:55px;height:55px;border-radius:50%;
+  background:#111;
+  display:flex;align-items:center;justify-content:center;
+  position:absolute;
+}
 .bubble:nth-child(1){left:20px;}
 .bubble:nth-child(2){right:20px;}
 .bubble:nth-child(3){left:50%;transform:translateX(-50%);top:35px;}
 
+/* SCREENS */
+.screen{display:none;position:absolute;width:100%;height:100%;}
+.active{display:block;}
+
+.grid{text-align:center;margin-top:100px;}
+.app{display:inline-block;margin:10px;font-size:11px;}
+
+.icon{
+  width:65px;height:65px;
+  border-radius:20px;
+  background:#444;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+
+.exit{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:red;
+  padding:5px;
+}
+
+/* CAMERA */
+video{width:100%;transform:scaleX(-1);}
+canvas{position:absolute;top:0;left:0;}
 </style>
 </head>
 
 <body>
+
 <div class="phone">
 
+<!-- TOP -->
 <div class="topbar">
-<div class="bubble" id="time"></div>
-<div class="bubble">🌤</div>
-<div class="bubble" onclick="openApp('store')">📦</div>
+  <div class="bubble" id="time"></div>
+  <div class="bubble">🌤</div>
+  <div class="bubble" onclick="openApp('settings')">⚙</div>
 </div>
 
 <!-- HOME -->
-<div id="home" class="screen">
-<div class="pages" id="pages">
+<div id="home" class="screen active">
+<div class="grid">
 
-<div class="page" id="page1">
+<div class="app"><div class="icon" onclick="openApp('camera')">📷</div>Camera</div>
+<div class="app"><div class="icon" onclick="openApp('photos')">🖼</div>Photos</div>
+<div class="app"><div class="icon" onclick="openApp('browser')">🌐</div>Browser</div>
 <div class="app"><div class="icon" onclick="openApp('finger')">✋</div>Finger</div>
+
 <div class="app"><div class="icon" onclick="openApp('notes')">📝</div>Notes</div>
-</div>
-
-<div class="page" id="page2">
-<div class="app"><div class="icon" onclick="openApp('gallery')">🖼</div>Gallery</div>
 <div class="app"><div class="icon" onclick="openApp('game')">🎮</div>Game</div>
-</div>
+<div class="app"><div class="icon" onclick="openApp('calc')">🧮</div>Calc</div>
+<div class="app"><div class="icon" onclick="openApp('settings')">⚙</div>Settings</div>
 
 </div>
-
-<div class="dock">
-<div class="icon" onclick="openApp('browser')">🌐</div>
 </div>
 
-</div>
-
-<!-- STORE -->
-<div id="store" class="screen hidden">
+<!-- CAMERA -->
+<div id="camera" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<button onclick="install('calc')">Install Calculator</button>
+<video id="cam" autoplay></video>
+<button onclick="takePhoto()">📸</button>
+<canvas id="c"></canvas>
 </div>
 
-<!-- APPS -->
-<div id="browser" class="screen hidden">
+<!-- PHOTOS -->
+<div id="photos" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<div id="gallery"></div>
+</div>
+
+<!-- BROWSER -->
+<div id="browser" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <input id="search">
 <button onclick="frame.src='https://bing.com/search?q='+search.value">Go</button>
 <iframe id="frame" style="width:100%;height:80%"></iframe>
 </div>
 
-<div id="notes" class="screen hidden">
+<!-- NOTES -->
+<div id="notes" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <textarea style="width:100%;height:80%"></textarea>
 </div>
 
-<div id="game" class="screen hidden">
+<!-- GAME -->
+<div id="game" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <h2 id="score">0</h2>
 <button onclick="score.innerText++">Tap</button>
 </div>
 
-<div id="gallery" class="screen hidden">
-<div class="exit" onclick="goHome()">Exit</div>
-<div id="images"></div>
-</div>
-
-<div id="calc" class="screen hidden">
+<!-- CALC -->
+<div id="calc" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <input id="calcInput">
 <button onclick="calcInput.value=eval(calcInput.value)">=</button>
 </div>
 
-<div id="finger" class="screen hidden">
+<!-- SETTINGS -->
+<div id="settings" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<h3>Settings</h3>
+<p>Brightness</p>
+<input type="range" min="0.5" max="1.5" step="0.1"
+oninput="document.body.style.filter='brightness('+this.value+')'">
+</div>
+
+<!-- FINGER -->
+<div id="finger" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
 <video id="fingerCam" autoplay></video>
 <canvas id="fingerCanvas"></canvas>
+<button onclick="saveDrawing()">Save</button>
 </div>
 
 </div>
@@ -121,75 +160,93 @@ canvas{position:absolute;top:0;left:0;}
 <script>
 
 /* TIME */
-setInterval(()=>time.innerText=new Date().toLocaleTimeString(),1000);
+setInterval(()=>{
+  time.innerText=new Date().toLocaleTimeString();
+},1000);
 
 /* NAV */
 function openApp(id){
-document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-if(id==="finger") startFinger();
-if(id==="gallery") loadImages();
-}
-function goHome(){openApp("home");}
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 
-/* SWIPE */
-let startX=0;
-document.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-document.addEventListener("touchend",e=>{
-let diff=e.changedTouches[0].clientX-startX;
-if(diff<-50) pages.style.transform="translateX(-100%)";
-if(diff>50) pages.style.transform="translateX(0)";
-});
+  if(id==="camera"){
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(stream=>cam.srcObject=stream);
+  }
 
-/* INSTALL */
-function install(app){
-localStorage.setItem("installed_"+app,true);
-alert("Installed!");
+  if(id==="photos") loadPhotos();
+  if(id==="finger") startFinger();
 }
 
-/* FINGER SYSTEM (same core) */
+function goHome(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  home.classList.add('active');
+}
+
+/* CAMERA */
+function takePhoto(){
+  c.width=cam.videoWidth;
+  c.height=cam.videoHeight;
+  c.getContext("2d").drawImage(cam,0,0);
+
+  let img=c.toDataURL();
+  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
+  arr.push(img);
+  localStorage.setItem("photos",JSON.stringify(arr));
+}
+
+function loadPhotos(){
+  gallery.innerHTML="";
+  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
+  arr.forEach(i=>{
+    let img=document.createElement("img");
+    img.src=i;
+    img.style.width="80px";
+    gallery.appendChild(img);
+  });
+}
+
+/* ===== FINGER SYSTEM ===== */
 let canvas=document.getElementById("fingerCanvas");
 let ctx=canvas.getContext("2d");
 canvas.width=320;canvas.height=400;
 
 const hands=new Hands({
-locateFile:(file)=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  locateFile:(file)=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
 });
+
 hands.setOptions({maxNumHands:1});
 
 hands.onResults(r=>{
-if(!r.multiHandLandmarks.length) return;
-let lm=r.multiHandLandmarks[0];
+  if(!r.multiHandLandmarks.length) return;
+  let lm=r.multiHandLandmarks[0];
 
-let x=lm[8].x*canvas.width;
-let y=lm[8].y*canvas.height;
+  let x=lm[8].x*canvas.width;
+  let y=lm[8].y*canvas.height;
 
-ctx.fillStyle="red";
-ctx.beginPath();
-ctx.arc(x,y,5,0,Math.PI*2);
-ctx.fill();
+  ctx.fillStyle="red";
+  ctx.beginPath();
+  ctx.arc(x,y,5,0,Math.PI*2);
+  ctx.fill();
 });
 
 function startFinger(){
-const cam=new Camera(fingerCam,{
-onFrame: async ()=>await hands.send({image:fingerCam}),
-width:320,height:400
-});
-cam.start();
+  const cam=new Camera(fingerCam,{
+    onFrame: async ()=>await hands.send({image:fingerCam}),
+    width:320,height:400
+  });
+  cam.start();
 }
 
-/* GALLERY */
-function loadImages(){
-images.innerHTML="";
-let arr=JSON.parse(localStorage.getItem("imgs")||"[]");
-arr.forEach(i=>{
-let im=document.createElement("img");
-im.src=i;im.style.width="80px";
-images.appendChild(im);
-});
+function saveDrawing(){
+  let img=canvas.toDataURL();
+  let arr=JSON.parse(localStorage.getItem("photos")||"[]");
+  arr.push(img);
+  localStorage.setItem("photos",JSON.stringify(arr));
 }
 
 </script>
+
 </body>
 </html>
 <script src="upgrade.js"></script>
