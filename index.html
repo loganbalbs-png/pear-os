@@ -3,6 +3,10 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- 🔥 MediaPipe (for real finger tracking) -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
 <style>
 body{
   margin:0;
@@ -24,7 +28,7 @@ body{
   color:white;
 }
 
-/* BUBBLES (triangle) */
+/* BUBBLES */
 .topbar{position:absolute;top:10px;width:100%;height:80px;}
 .bubble{
   width:55px;height:55px;border-radius:50%;
@@ -50,19 +54,6 @@ body{
 
 .exit{position:absolute;top:10px;right:10px;background:red;padding:5px;}
 
-/* MARY */
-#mary{
-  position:absolute;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  width:70px;height:70px;
-  border-radius:50%;
-  background:orange;
-  display:none;
-}
-
-/* CANVAS */
 canvas{position:absolute;top:0;left:0;}
 video{width:100%;}
 </style>
@@ -72,7 +63,7 @@ video{width:100%;}
 
 <div class="phone">
 
-<!-- BUBBLES -->
+<!-- TOP -->
 <div class="topbar">
   <div class="bubble" id="time"></div>
   <div class="bubble">🌤</div>
@@ -82,44 +73,16 @@ video{width:100%;}
 <!-- HOME -->
 <div id="home" class="screen active">
 <div class="grid">
-
-<div class="app"><div class="icon" onclick="openApp('camera')">📷</div>Camera</div>
-<div class="app"><div class="icon" onclick="openApp('browser')">🌐</div>Browser</div>
-<div class="app"><div class="icon" onclick="openApp('calc')">🧮</div>Calc</div>
 <div class="app"><div class="icon" onclick="openApp('finger')">✋</div>Finger</div>
-
 </div>
 </div>
 
-<!-- CAMERA -->
-<div id="camera" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<video id="cam" autoplay></video>
-</div>
-
-<!-- BROWSER -->
-<div id="browser" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<input id="search">
-<button onclick="frame.src='https://bing.com/search?q='+search.value">Go</button>
-<iframe id="frame" style="width:100%;height:80%"></iframe>
-</div>
-
-<!-- CALC -->
-<div id="calc" class="screen">
-<div class="exit" onclick="goHome()">Exit</div>
-<input id="calcInput">
-<button onclick="calcInput.value=eval(calcInput.value)">=</button>
-</div>
-
-<!-- FINGER FOLLOWER -->
+<!-- FINGER TRACKING -->
 <div id="finger" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<video id="fingerCam" autoplay></video>
+<video id="fingerCam" autoplay playsinline></video>
 <canvas id="fingerCanvas"></canvas>
 </div>
-
-<div id="mary"></div>
 
 </div>
 
@@ -133,11 +96,6 @@ function openApp(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 
-  if(id==="camera"){
-    navigator.mediaDevices.getUserMedia({video:true})
-    .then(stream=>cam.srcObject=stream);
-  }
-
   if(id==="finger"){
     startFinger();
   }
@@ -148,109 +106,68 @@ function goHome(){
   home.classList.add('active');
 }
 
-/* ===== FINGER FOLLOWER ===== */
-let fingerPoints=[];
-let fCanvas=document.getElementById("fingerCanvas");
-let fCtx=fCanvas.getContext("2d");
+/* ===== REAL FINGER TRACKING ===== */
+let canvas=document.getElementById("fingerCanvas");
+let ctx=canvas.getContext("2d");
+canvas.width=320;
+canvas.height=400;
 
-function startFinger(){
-  navigator.mediaDevices.getUserMedia({video:true})
-  .then(stream=>fingerCam.srcObject=stream);
+let drawing=false;
 
-  fCanvas.width=320;
-  fCanvas.height=400;
-  fingerPoints=[];
-  drawFinger();
-}
-
-function drawFinger(){
-  fCtx.clearRect(0,0,fCanvas.width,fCanvas.height);
-
-  if(fingerPoints.length>1){
-    fCtx.beginPath();
-    fCtx.moveTo(fingerPoints[0].x,fingerPoints[0].y);
-    for(let i=1;i<fingerPoints.length;i++){
-      fCtx.lineTo(fingerPoints[i].x,fingerPoints[i].y);
-    }
-    fCtx.strokeStyle="lime";
-    fCtx.lineWidth=3;
-    fCtx.stroke();
-  }
-
-  fingerPoints.forEach(p=>{
-    fCtx.beginPath();
-    fCtx.arc(p.x,p.y,5,0,Math.PI*2);
-    fCtx.fillStyle="yellow";
-    fCtx.fill();
-  });
-
-  requestAnimationFrame(drawFinger);
-}
-
-fCanvas.addEventListener("click",(e)=>{
-  let rect=fCanvas.getBoundingClientRect();
-  fingerPoints.push({
-    x:e.clientX-rect.left,
-    y:e.clientY-rect.top
-  });
+const hands=new Hands({
+  locateFile:(file)=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
 });
 
-/* ===== MARY ===== */
-let state=null;
+hands.setOptions({
+  maxNumHands:1,
+  modelComplexity:0,
+  minDetectionConfidence:0.7,
+  minTrackingConfidence:0.7
+});
 
-function speak(t){
-  speechSynthesis.speak(new SpeechSynthesisUtterance(t));
-}
+hands.onResults(results=>{
+  if(!results.multiHandLandmarks.length) return;
 
-function reply(input){
-  input=input.toLowerCase();
+  let lm=results.multiHandLandmarks[0];
 
-  if(input.includes("weather")){
-    return "Stick your head out the window.";
-  }
+  let x=lm[8].x*canvas.width;
+  let y=lm[8].y*canvas.height;
 
-  if(input.includes("play my jam")){
-    state="jam";
-    return "Which one, one or two?";
-  }
+  let tx=lm[4].x*canvas.width;
+  let ty=lm[4].y*canvas.height;
 
-  if(state==="jam"){
-    state=null;
+  let dist=Math.hypot(x-tx,y-ty);
 
-    if(input.includes("one")){
-      new Audio("https://www.myinstants.com/media/sounds/icarly-theme-song.mp3").play();
-      return "Playing jam one.";
+  if(dist<40){
+    if(!drawing){
+      ctx.beginPath();
+      ctx.moveTo(x,y);
+      drawing=true;
+    }else{
+      ctx.lineTo(x,y);
+      ctx.strokeStyle="lime";
+      ctx.lineWidth=3;
+      ctx.stroke();
     }
-
-    if(input.includes("two")){
-      new Audio("https://www.myinstants.com/media/sounds/victorious-theme-song.mp3").play();
-      return "Playing jam two.";
-    }
-  }
-
-  if(input.includes("hello")){
-    return "What do you want?";
-  }
-
-  return "Try again.";
-}
-
-/* VOICE */
-const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
-rec.continuous=true;
-
-rec.onresult=e=>{
-  let text=e.results[e.results.length-1][0].transcript.toLowerCase();
-
-  if(text.includes("hey mary")){
-    mary.style.display="block";
-    speak("Yeah?");
   }else{
-    speak(reply(text));
+    drawing=false;
   }
-};
+});
 
-rec.start();
+/* CAMERA */
+function startFinger(){
+  const video=document.getElementById("fingerCam");
+
+  const cam=new Camera(video,{
+    onFrame: async ()=>{
+      await hands.send({image:video});
+    },
+    width:320,
+    height:400
+  });
+
+  cam.start();
+}
 
 </script>
 
