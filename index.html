@@ -27,28 +27,8 @@ body{
   color:white;
 }
 
-/* TOP */
-.topbar{
-  position:absolute;
-  top:10px;
-  width:100%;
-  display:flex;
-  justify-content:space-around;
-}
-
-.bubble{
-  background:#111;
-  padding:8px 12px;
-  border-radius:20px;
-}
-
 /* SCREENS */
-.screen{
-  display:none;
-  position:absolute;
-  width:100%;
-  height:100%;
-}
+.screen{display:none;position:absolute;width:100%;height:100%;}
 .active{display:block;}
 
 /* GRID */
@@ -60,40 +40,22 @@ body{
   text-align:center;
 }
 
-.app{font-size:11px;}
-
 .icon{
-  width:60px;
-  height:60px;
+  width:60px;height:60px;
   border-radius:15px;
   background:linear-gradient(135deg,#4facfe,#00f2fe);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  margin:auto;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin:auto;
 }
 
-/* EXIT */
 .exit{
   position:absolute;
-  top:10px;
-  right:10px;
-  background:red;
-  padding:5px;
+  top:10px;right:10px;
+  background:red;padding:5px;
 }
 
-/* CAMERA */
-video{width:100%;transform:scaleX(-1);}
+video{width:100%;} /* NOT inverted */
 canvas{position:absolute;top:0;left:0;}
-
-/* SLAP */
-.post{
-  background:#222;
-  margin:10px;
-  padding:10px;
-  border-radius:10px;
-}
 </style>
 </head>
 
@@ -101,27 +63,29 @@ canvas{position:absolute;top:0;left:0;}
 
 <div class="phone">
 
-<div class="topbar">
-<div class="bubble" id="time"></div>
-<div class="bubble">🌤</div>
-<div class="bubble">⚙</div>
-</div>
-
 <!-- HOME -->
 <div id="home" class="screen active">
 <div class="grid">
 
-<div class="app"><div class="icon" onclick="openApp('camera')">📷</div>Camera</div>
-<div class="app"><div class="icon" onclick="openApp('photos')">🖼</div>Photos</div>
-<div class="app"><div class="icon" onclick="openApp('browser')">🌐</div>Browser</div>
-<div class="app"><div class="icon" onclick="openApp('finger')">✋</div>Finger</div>
+<div class="icon" onclick="openApp('camera')">📷</div>
+<div class="icon" onclick="openApp('photos')">🖼</div>
+<div class="icon" onclick="openApp('browser')">🌐</div>
+<div class="icon" onclick="openApp('music')">🎵</div>
 
-<div class="app"><div class="icon" onclick="openApp('notes')">📝</div>Notes</div>
-<div class="app"><div class="icon" onclick="openApp('game')">🎮</div>Game</div>
-<div class="app"><div class="icon" onclick="openApp('calc')">🧮</div>Calc</div>
-<div class="app"><div class="icon" onclick="openApp('slap')">💬</div>Slap</div>
+<div class="icon" onclick="openApp('finger')">✋</div>
+<div class="icon" onclick="openApp('notes')">📝</div>
+<div class="icon" onclick="openApp('game')">🎮</div>
+<div class="icon" onclick="openApp('slap')">💬</div>
 
 </div>
+</div>
+
+<!-- MUSIC -->
+<div id="music" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<audio id="song" src="https://www.myinstants.com/media/sounds/icarly-theme-song.mp3"></audio>
+<button onclick="song.play()">Play</button>
+<button onclick="song.pause()">Pause</button>
 </div>
 
 <!-- CAMERA -->
@@ -138,34 +102,44 @@ canvas{position:absolute;top:0;left:0;}
 <div id="gallery"></div>
 </div>
 
+<!-- BROWSER -->
+<div id="browser" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<input id="search">
+<button onclick="frame.src='https://bing.com/search?q='+search.value">Go</button>
+<iframe id="frame" style="width:100%;height:80%"></iframe>
+</div>
+
 <!-- SLAP -->
 <div id="slap" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<div class="post">Andre: This app is actually working 👀</div>
-<div class="post">Cat: Why are you even here?</div>
-<div class="post">Robbie: Rex says hi 🐸</div>
+<div>Andre: It actually works now</div>
+<div>Cat: Don’t mess it up again</div>
 </div>
 
 <!-- GAME -->
 <div id="game" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<canvas id="gameCanvas" width="300" height="400"></canvas>
+<h2 id="score">0</h2>
+<button onclick="score.innerText++">Tap</button>
+</div>
+
+<!-- NOTES -->
+<div id="notes" class="screen">
+<div class="exit" onclick="goHome()">Exit</div>
+<textarea style="width:100%;height:80%"></textarea>
 </div>
 
 <!-- FINGER -->
 <div id="finger" class="screen">
 <div class="exit" onclick="goHome()">Exit</div>
-<video id="fingerCam" autoplay></video>
+<video id="fingerCam" autoplay playsinline></video>
 <canvas id="fingerCanvas"></canvas>
-<button onclick="saveDrawing()">Save</button>
 </div>
 
 </div>
 
 <script>
-
-/* TIME */
-setInterval(()=>time.innerText=new Date().toLocaleTimeString(),1000);
 
 /* NAV */
 function openApp(id){
@@ -179,7 +153,6 @@ navigator.mediaDevices.getUserMedia({video:true})
 
 if(id==="photos") loadPhotos();
 if(id==="finger") startFinger();
-if(id==="game") startGame();
 }
 
 function goHome(){
@@ -192,13 +165,13 @@ function takePhoto(){
 c.width=cam.videoWidth;
 c.height=cam.videoHeight;
 c.getContext("2d").drawImage(cam,0,0);
+
 let img=c.toDataURL();
 let arr=JSON.parse(localStorage.getItem("photos")||"[]");
 arr.push(img);
 localStorage.setItem("photos",JSON.stringify(arr));
 }
 
-/* PHOTOS */
 function loadPhotos(){
 gallery.innerHTML="";
 let arr=JSON.parse(localStorage.getItem("photos")||"[]");
@@ -206,61 +179,145 @@ arr.forEach(i=>{
 let img=document.createElement("img");
 img.src=i;
 img.style.width="80px";
-img.onclick=()=>window.open(i);
 gallery.appendChild(img);
 });
 }
 
-/* GAME */
-let gctx=document.getElementById("gameCanvas").getContext("2d");
-let bird=150,vel=0;
-function startGame(){
-function loop(){
-gctx.clearRect(0,0,300,400);
-vel+=0.5;
-bird+=vel;
-gctx.fillRect(100,bird,20,20);
-requestAnimationFrame(loop);
-}
-loop();
-}
-document.addEventListener("click",()=>vel=-8);
+/* ===== FINGER SYSTEM (YOUR EXACT REQUEST) ===== */
 
-/* FINGER */
-let canvas=document.getElementById("fingerCanvas");
-let ctx=canvas.getContext("2d");
-canvas.width=320;canvas.height=400;
+let canvas = document.getElementById("fingerCanvas");
+let ctx = canvas.getContext("2d");
 
-const hands=new Hands({locateFile:(f)=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`});
+canvas.width = 320;
+canvas.height = 400;
+
+let lastPoint = null;
+let lastPinch = false;
+let currentColor = "red";
+
+let holdStart = 0;
+let holding = false;
+
+const fingerColors = ["yellow","red","green","blue","purple"];
+
+const hands = new Hands({
+  locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`
+});
+
 hands.setOptions({maxNumHands:1});
 
-hands.onResults(r=>{
-if(!r.multiHandLandmarks.length) return;
-let lm=r.multiHandLandmarks[0];
+hands.onResults(results => {
+  if (!results.multiHandLandmarks.length) {
+    lastPoint = null;
+    return;
+  }
 
-let x=lm[8].x*canvas.width;
-let y=lm[8].y*canvas.height;
+  let lm = results.multiHandLandmarks[0];
+  const tips = [4,8,12,16,20];
 
-ctx.beginPath();
-ctx.arc(x,y,5,0,Math.PI*2);
-ctx.fillStyle="red";
-ctx.fill();
+  let fingersUp = tips.map(i => lm[i].y < lm[i-2].y);
+
+  /* SHOW COLORS ON FINGERS */
+  tips.forEach((t,i)=>{
+    let fx = lm[t].x * canvas.width;
+    let fy = lm[t].y * canvas.height;
+
+    ctx.beginPath();
+    ctx.arc(fx,fy,6,0,Math.PI*2);
+    ctx.fillStyle=fingerColors[i];
+    ctx.fill();
+  });
+
+  /* PICK COLOR */
+  let count = fingersUp.filter(f=>f).length;
+  if(count===1){
+    currentColor = fingerColors[fingersUp.findIndex(f=>f)];
+  }
+
+  /* PINCH */
+  let x = lm[8].x * canvas.width;
+  let y = lm[8].y * canvas.height;
+  let tx = lm[4].x * canvas.width;
+  let ty = lm[4].y * canvas.height;
+
+  let dist = Math.hypot(x-tx,y-ty);
+  let pinching = dist < 40;
+
+  if(pinching && !lastPinch){
+
+    ctx.beginPath();
+    ctx.arc(x,y,5,0,Math.PI*2);
+    ctx.fillStyle=currentColor;
+    ctx.fill();
+
+    if(lastPoint){
+      ctx.beginPath();
+      ctx.moveTo(lastPoint.x,lastPoint.y);
+      ctx.lineTo(x,y);
+      ctx.strokeStyle=currentColor;
+      ctx.lineWidth=3;
+      ctx.stroke();
+    }
+
+    lastPoint = {x,y};
+  }
+
+  lastPinch = pinching;
+
+  /* CURSOR */
+  ctx.beginPath();
+  ctx.arc(x,y,4,0,Math.PI*2);
+  ctx.fillStyle=currentColor;
+  ctx.fill();
+
+  /* HOLD TO ERASE */
+  let palm = lm[0].y;
+
+  if(palm < 0.5){
+    if(!holding){
+      holdStart = Date.now();
+      holding = true;
+    }
+
+    if(Date.now() - holdStart > 5000){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      lastPoint=null;
+      holding=false;
+    }
+  } else {
+    holding=false;
+  }
+
 });
 
+/* START CAMERA */
 function startFinger(){
-const cam=new Camera(fingerCam,{
-onFrame: async ()=>await hands.send({image:fingerCam}),
-width:320,height:400
-});
-cam.start();
+  const cam = new Camera(fingerCam,{
+    onFrame: async ()=>await hands.send({image:fingerCam}),
+    width:320,
+    height:400
+  });
+  cam.start();
 }
 
-function saveDrawing(){
-let img=canvas.toDataURL();
-let arr=JSON.parse(localStorage.getItem("photos")||"[]");
-arr.push(img);
-localStorage.setItem("photos",JSON.stringify(arr));
+/* ===== MARY (BACK) ===== */
+
+function speak(t){
+  speechSynthesis.speak(new SpeechSynthesisUtterance(t));
 }
+
+const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
+rec.continuous=true;
+
+rec.onresult=e=>{
+  let text=e.results[e.results.length-1][0].transcript.toLowerCase();
+
+  if(text.includes("hey mary")) speak("What now?");
+  else if(text.includes("weather")) speak("Look outside.");
+  else if(text.includes("1+1")) speak("It's two.");
+};
+
+rec.start();
 
 </script>
 
